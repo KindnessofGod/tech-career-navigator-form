@@ -9,6 +9,7 @@ import { toast } from '@/hooks/use-toast';
 
 interface FormData {
   name: string;
+  whatsappNumber: string;
   activities: string;
   preference: string;
   project: string;
@@ -33,6 +34,7 @@ interface CareerRecommendation {
 const Index = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
+    whatsappNumber: '',
     activities: '',
     preference: '',
     project: '',
@@ -49,6 +51,7 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [recommendations, setRecommendations] = useState<CareerRecommendation[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const questions = [
     {
@@ -56,6 +59,13 @@ const Index = () => {
       label: 'Name',
       type: 'text',
       placeholder: 'Enter your name',
+      required: true
+    },
+    {
+      key: 'whatsappNumber' as keyof FormData,
+      label: 'WhatsApp Number',
+      type: 'text',
+      placeholder: 'Enter your WhatsApp number (e.g., +1234567890)',
       required: true
     },
     {
@@ -225,11 +235,55 @@ const Index = () => {
     return recommendations.slice(0, 3); // Return top 3 recommendations
   };
 
+  const submitFormData = async (data: FormData, recommendations: CareerRecommendation[]) => {
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        userId: data.whatsappNumber,
+        formData: data,
+        recommendations: recommendations.map(rec => ({
+          title: rec.title,
+          description: rec.description,
+          skills: rec.skills,
+          timeToStart: rec.timeToStart
+        })),
+        submittedAt: new Date().toISOString()
+      };
+
+      const response = await fetch('https://kindness300m2.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form data');
+      }
+
+      console.log('Form data submitted successfully');
+      toast({
+        title: "Form Submitted!",
+        description: "Your career assessment has been submitted successfully.",
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Submission Error",
+        description: "There was an error submitting your form. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleInputChange = (key: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const currentQuestion = questions[currentStep];
     if (currentQuestion.required && !formData[currentQuestion.key]) {
       toast({
@@ -246,6 +300,10 @@ const Index = () => {
       // Generate recommendations
       const recs = getCareerRecommendations(formData);
       setRecommendations(recs);
+      
+      // Submit form data to webhook
+      await submitFormData(formData, recs);
+      
       setShowResults(true);
       toast({
         title: "Analysis Complete!",
@@ -263,6 +321,7 @@ const Index = () => {
   const resetForm = () => {
     setFormData({
       name: '',
+      whatsappNumber: '',
       activities: '',
       preference: '',
       project: '',
@@ -433,9 +492,10 @@ const Index = () => {
                 </Button>
                 <Button
                   onClick={handleNext}
+                  disabled={isSubmitting}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 flex items-center gap-2"
                 >
-                  {currentStep === questions.length - 1 ? 'Get Results' : 'Next'}
+                  {isSubmitting ? 'Submitting...' : (currentStep === questions.length - 1 ? 'Get Results' : 'Next')}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
