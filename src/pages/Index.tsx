@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, ArrowRight, Sparkles, Code, Design, Shield, BarChart3, Users } from 'lucide-react';
+import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface FormData {
@@ -148,7 +147,7 @@ const Index = () => {
       recommendations.push({
         title: 'Frontend Developer',
         description: 'Create beautiful, interactive user interfaces for websites and applications.',
-        icon: <Design className="w-8 h-8 text-blue-500" />,
+        icon: <Palette className="w-8 h-8 text-blue-500" />,
         skills: ['HTML/CSS', 'JavaScript', 'React', 'Design'],
         timeToStart: '3-6 months'
       });
