@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageCircle } from 'lucide-react';
+import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface FormData {
@@ -52,7 +52,6 @@ const Index = () => {
   const [showResults, setShowResults] = useState(false);
   const [recommendations, setRecommendations] = useState<CareerRecommendation[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [aiResponse, setAiResponse] = useState<string>('');
 
   const questions = [
     {
@@ -263,16 +262,7 @@ const Index = () => {
         throw new Error('Failed to submit form data');
       }
 
-      const responseData = await response.json();
-      console.log('Form data submitted successfully:', responseData);
-      
-      // Check if the webhook response includes an AI message
-      if (responseData && responseData.aiResponse) {
-        setAiResponse(responseData.aiResponse);
-      } else if (responseData && responseData.message) {
-        setAiResponse(responseData.message);
-      }
-
+      console.log('Form data submitted successfully');
       toast({
         title: "Form Submitted!",
         description: "Your career assessment has been submitted successfully.",
@@ -347,7 +337,6 @@ const Index = () => {
     setCurrentStep(0);
     setShowResults(false);
     setRecommendations([]);
-    setAiResponse('');
   };
 
   if (showResults) {
@@ -366,28 +355,6 @@ const Index = () => {
               Based on your responses, here are the tech career paths that align best with your interests and skills.
             </p>
           </div>
-
-          {/* AI Response Section */}
-          {aiResponse && (
-            <div className="max-w-4xl mx-auto mb-8">
-              <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-                <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-md">
-                    <MessageCircle className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-xl font-bold text-gray-800">AI Career Insights</CardTitle>
-                  <CardDescription className="text-gray-600">Personalized analysis based on your responses</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                      {aiResponse}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto mb-8">
             {recommendations.map((rec, index) => (
