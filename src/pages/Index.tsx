@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -266,8 +267,20 @@ const Index = () => {
       const result = await response.text();
       console.log('Webhook response:', result);
       
-      // Set the AI response from the webhook
-      setAiResponse(result);
+      // Parse JSON response and extract recommendation text
+      try {
+        const jsonResponse = JSON.parse(result);
+        if (jsonResponse.recommendation) {
+          setAiResponse(jsonResponse.recommendation);
+        } else {
+          // If no recommendation field, use the entire response
+          setAiResponse(result);
+        }
+      } catch (parseError) {
+        // If it's not JSON, use the raw text
+        console.log('Response is not JSON, using raw text');
+        setAiResponse(result);
+      }
 
       console.log('Form data submitted successfully');
       toast({
