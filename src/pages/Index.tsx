@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users } from 'lucide-react';
+import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageSquare } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface FormData {
@@ -51,6 +51,7 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [recommendations, setRecommendations] = useState<CareerRecommendation[]>([]);
+  const [aiResponse, setAiResponse] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const questions = [
@@ -262,6 +263,12 @@ const Index = () => {
         throw new Error('Failed to submit form data');
       }
 
+      const result = await response.text();
+      console.log('Webhook response:', result);
+      
+      // Set the AI response from the webhook
+      setAiResponse(result);
+
       console.log('Form data submitted successfully');
       toast({
         title: "Form Submitted!",
@@ -269,6 +276,8 @@ const Index = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
+      // Set a default AI response in case of error
+      setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
       toast({
         title: "Submission Error",
         description: "There was an error submitting your form. Please try again.",
@@ -337,6 +346,7 @@ const Index = () => {
     setCurrentStep(0);
     setShowResults(false);
     setRecommendations([]);
+    setAiResponse('');
   };
 
   if (showResults) {
@@ -355,6 +365,32 @@ const Index = () => {
               Based on your responses, here are the tech career paths that align best with your interests and skills.
             </p>
           </div>
+
+          {/* AI Response Section */}
+          {aiResponse && (
+            <div className="max-w-4xl mx-auto mb-8">
+              <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
+                      <MessageSquare className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
+                      <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-gray max-w-none">
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                      {aiResponse}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto mb-8">
             {recommendations.map((rec, index) => (
