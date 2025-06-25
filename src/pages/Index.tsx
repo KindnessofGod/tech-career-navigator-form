@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,6 +29,8 @@ interface CareerRecommendation {
   icon: React.ReactNode;
   skills: string[];
   timeToStart: string;
+  courseLink: string;
+  courseName: string;
 }
 
 const Index = () => {
@@ -55,6 +55,38 @@ const Index = () => {
   const [recommendations, setRecommendations] = useState<CareerRecommendation[]>([]);
   const [aiResponse, setAiResponse] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Course mapping object
+  const courseMapping = {
+    'Frontend Developer': { 
+      link: 'https://www.palmtechniq.com/courses/web-development', 
+      name: 'Web Development' 
+    },
+    'Data Analyst': { 
+      link: 'https://www.palmtechniq.com/courses/data-analytics', 
+      name: 'Data Analytics' 
+    },
+    'Cybersecurity Specialist': { 
+      link: 'https://www.palmtechniq.com/courses/cybersecurity', 
+      name: 'Cybersecurity' 
+    },
+    'Backend Developer': { 
+      link: 'https://www.palmtechniq.com/courses/web-development', 
+      name: 'Web Development' 
+    },
+    'Product Manager': { 
+      link: 'https://www.palmtechniq.com/courses/project-management', 
+      name: 'Project Management' 
+    },
+    'AI/ML Engineer': { 
+      link: 'https://www.palmtechniq.com/courses/data-analytics', 
+      name: 'Data Analytics' 
+    },
+    'Full-Stack Developer': { 
+      link: 'https://www.palmtechniq.com/courses/web-development', 
+      name: 'Web Development' 
+    }
+  };
 
   const questions = [
     {
@@ -162,7 +194,9 @@ const Index = () => {
         description: 'Create beautiful, interactive user interfaces for websites and applications.',
         icon: <Palette className="w-8 h-8 text-blue-500" />,
         skills: ['HTML/CSS', 'JavaScript', 'React', 'Design'],
-        timeToStart: '3-6 months'
+        timeToStart: '3-6 months',
+        courseLink: courseMapping['Frontend Developer'].link,
+        courseName: courseMapping['Frontend Developer'].name
       });
     }
 
@@ -174,7 +208,9 @@ const Index = () => {
         description: 'Turn data into insights that drive business decisions.',
         icon: <BarChart3 className="w-8 h-8 text-green-500" />,
         skills: ['SQL', 'Python', 'Excel', 'Statistics'],
-        timeToStart: '2-4 months'
+        timeToStart: '2-4 months',
+        courseLink: courseMapping['Data Analyst'].link,
+        courseName: courseMapping['Data Analyst'].name
       });
     }
 
@@ -185,7 +221,9 @@ const Index = () => {
         description: 'Protect systems and data from digital threats.',
         icon: <Shield className="w-8 h-8 text-red-500" />,
         skills: ['Network Security', 'Ethical Hacking', 'Risk Assessment'],
-        timeToStart: '4-8 months'
+        timeToStart: '4-8 months',
+        courseLink: courseMapping['Cybersecurity Specialist'].link,
+        courseName: courseMapping['Cybersecurity Specialist'].name
       });
     }
 
@@ -197,7 +235,9 @@ const Index = () => {
         description: 'Build the server-side logic that powers applications.',
         icon: <Code className="w-8 h-8 text-purple-500" />,
         skills: ['Python/Java', 'Databases', 'APIs', 'Cloud'],
-        timeToStart: '4-6 months'
+        timeToStart: '4-6 months',
+        courseLink: courseMapping['Backend Developer'].link,
+        courseName: courseMapping['Backend Developer'].name
       });
     }
 
@@ -209,7 +249,9 @@ const Index = () => {
         description: 'Bridge technical teams and business needs to create successful products.',
         icon: <Users className="w-8 h-8 text-orange-500" />,
         skills: ['Strategy', 'Communication', 'Analytics', 'User Research'],
-        timeToStart: '2-3 months'
+        timeToStart: '2-3 months',
+        courseLink: courseMapping['Product Manager'].link,
+        courseName: courseMapping['Product Manager'].name
       });
     }
 
@@ -220,7 +262,9 @@ const Index = () => {
         description: 'Build intelligent systems that can learn and make decisions.',
         icon: <Brain className="w-8 h-8 text-indigo-500" />,
         skills: ['Python', 'Machine Learning', 'Statistics', 'Neural Networks'],
-        timeToStart: '6-12 months'
+        timeToStart: '6-12 months',
+        courseLink: courseMapping['AI/ML Engineer'].link,
+        courseName: courseMapping['AI/ML Engineer'].name
       });
     }
 
@@ -231,7 +275,9 @@ const Index = () => {
         description: 'Work on both frontend and backend to build complete applications.',
         icon: <Code className="w-8 h-8 text-blue-500" />,
         skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
-        timeToStart: '6-9 months'
+        timeToStart: '6-9 months',
+        courseLink: courseMapping['Full-Stack Developer'].link,
+        courseName: courseMapping['Full-Stack Developer'].name
       });
     }
 
@@ -304,6 +350,13 @@ const Index = () => {
 
   const handleInputChange = (key: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !isSubmitting) {
+      e.preventDefault();
+      handleNext();
+    }
   };
 
   const handleNext = async () => {
@@ -432,6 +485,16 @@ const Index = () => {
                       <span className="text-sm text-gray-600">Time to start:</span>
                       <span className="font-semibold text-green-600">{rec.timeToStart}</span>
                     </div>
+                    <div className="pt-2">
+                      <Button 
+                        asChild
+                        className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold"
+                      >
+                        <a href={rec.courseLink} target="_blank" rel="noopener noreferrer">
+                          Enroll in {rec.courseName}
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -485,7 +548,7 @@ const Index = () => {
             </div>
           </div>
 
-          <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+          <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg" onKeyDown={handleKeyPress}>
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-gray-800">
                 {currentQuestion.label}
@@ -505,6 +568,7 @@ const Index = () => {
                     placeholder={currentQuestion.placeholder}
                     value={formData[currentQuestion.key]}
                     onChange={(e) => handleInputChange(currentQuestion.key, e.target.value)}
+                    onKeyDown={handleKeyPress}
                     className="mt-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -517,7 +581,10 @@ const Index = () => {
                     value={formData[currentQuestion.key]} 
                     onValueChange={(value) => handleInputChange(currentQuestion.key, value)}
                   >
-                    <SelectTrigger className="mt-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                    <SelectTrigger 
+                      className="mt-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                      onKeyDown={handleKeyPress}
+                    >
                       <SelectValue placeholder="Choose an option..." />
                     </SelectTrigger>
                     <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
@@ -549,6 +616,10 @@ const Index = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
+
+              <div className="text-center text-sm text-gray-500 mt-4">
+                Press Enter to continue
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -558,4 +629,3 @@ const Index = () => {
 };
 
 export default Index;
-
