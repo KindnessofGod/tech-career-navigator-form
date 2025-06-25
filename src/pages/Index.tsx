@@ -433,72 +433,82 @@ const Index = () => {
             </p>
           </div>
 
-          {/* AI Response Section */}
-          {aiResponse && (
-            <div className="max-w-4xl mx-auto mb-8">
-              <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
-                      <MessageSquare className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
-                      <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div 
-                    className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: aiResponse }}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Career Recommendations Cards */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto mb-8">
-            {recommendations.map((rec, index) => (
-              <Card key={index} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md">
-                    {rec.icon}
-                  </div>
-                  <CardTitle className="text-xl font-bold text-gray-800">{rec.title}</CardTitle>
-                  <CardDescription className="text-gray-600">{rec.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold text-gray-700 mb-2">Key Skills:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {rec.skills.map((skill, skillIndex) => (
-                          <span key={skillIndex} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                            {skill}
-                          </span>
-                        ))}
+          {/* Main Results Section - Split into two parts */}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-8 mb-8">
+              
+              {/* Left Side - AI Response Section */}
+              <div className="lg:col-span-1">
+                {aiResponse && (
+                  <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg h-full">
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
+                          <MessageSquare className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
+                          <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                      <span className="text-sm text-gray-600">Time to start:</span>
-                      <span className="font-semibold text-green-600">{rec.timeToStart}</span>
-                    </div>
-                    <div className="pt-2">
-                      <Button 
-                        asChild
-                        className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold"
-                      >
-                        <a href={rec.courseLink} target="_blank" rel="noopener noreferrer">
-                          Enroll in {rec.courseName}
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </CardHeader>
+                    <CardContent>
+                      <div 
+                        className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: aiResponse }}
+                      />
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+
+              {/* Right Side - Career Path Cards */}
+              <div className="lg:col-span-1">
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Career Paths</h2>
+                  {recommendations.slice(0, 3).map((rec, index) => (
+                    <Card key={index} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md flex-shrink-0">
+                            {rec.icon}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-gray-800 mb-2">{rec.title}</h3>
+                            <p className="text-gray-600 text-sm mb-3">{rec.description}</p>
+                            
+                            <div className="mb-3">
+                              <h4 className="font-semibold text-gray-700 text-sm mb-2">Key Skills:</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {rec.skills.map((skill, skillIndex) => (
+                                  <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-200">
+                              <span className="text-xs text-gray-600">Time to start:</span>
+                              <span className="font-semibold text-green-600 text-sm">{rec.timeToStart}</span>
+                            </div>
+                            
+                            <Button 
+                              asChild
+                              className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold text-sm py-2"
+                            >
+                              <a href={rec.courseLink} target="_blank" rel="noopener noreferrer">
+                                Enroll in {rec.courseName}
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="text-center">
