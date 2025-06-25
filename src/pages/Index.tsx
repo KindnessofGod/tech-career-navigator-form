@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -395,16 +396,16 @@ const Index = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="prose prose-gray max-w-none">
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                      {aiResponse}
-                    </p>
-                  </div>
+                  <div 
+                    className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: aiResponse }}
+                  />
                 </CardContent>
               </Card>
             </div>
           )}
 
+          {/* Career Recommendations Cards */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto mb-8">
             {recommendations.map((rec, index) => (
               <Card key={index} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -557,3 +558,4 @@ const Index = () => {
 };
 
 export default Index;
+
