@@ -253,7 +253,7 @@ const Index = () => {
         submittedAt: new Date().toISOString()
       };
 
-      const response = await fetch('https://kindness300m2.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0', {
+      const response = await fetch('https://kindness300m2.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
