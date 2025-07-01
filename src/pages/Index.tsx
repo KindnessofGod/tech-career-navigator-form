@@ -1,26 +1,35 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageSquare } from 'lucide-react';
+import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageSquare, Smartphone, Home, Target, Video, TrendingUp, Zap } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface FormData {
   name: string;
   whatsappNumber: string;
   activities: string;
+  activitiesOther: string;
   preference: string;
   project: string;
+  projectOther: string;
+  workFocus: string;
   workStyle: string;
   skills: string;
+  skillsOther: string;
   tools: string;
-  problemSolving: string;
+  strength: string;
+  techExposure: string;
+  techExposureOther: string;
+  motivation: string;
+  motivationOther: string;
   studyHours: string;
   device: string;
   learningStyle: string;
-  courseStyle: string;
+  learningStyleOther: string;
 }
 
 interface CareerRecommendation {
@@ -28,7 +37,7 @@ interface CareerRecommendation {
   description: string;
   icon: React.ReactNode;
   skills: string[];
-  timeToStart: string;
+  salary: string;
   courseLink: string;
   courseName: string;
 }
@@ -38,16 +47,24 @@ const Index = () => {
     name: '',
     whatsappNumber: '',
     activities: '',
+    activitiesOther: '',
     preference: '',
     project: '',
+    projectOther: '',
+    workFocus: '',
     workStyle: '',
     skills: '',
+    skillsOther: '',
     tools: '',
-    problemSolving: '',
+    strength: '',
+    techExposure: '',
+    techExposureOther: '',
+    motivation: '',
+    motivationOther: '',
     studyHours: '',
     device: '',
     learningStyle: '',
-    courseStyle: ''
+    learningStyleOther: ''
   });
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -58,34 +75,16 @@ const Index = () => {
 
   // Course mapping object
   const courseMapping = {
-    'Frontend Developer': { 
-      link: 'https://www.palmtechniq.com/courses/web-development', 
-      name: 'Web Development' 
-    },
-    'Data Analyst': { 
-      link: 'https://www.palmtechniq.com/courses/data-analytics', 
-      name: 'Data Analytics' 
-    },
-    'Cybersecurity Specialist': { 
-      link: 'https://www.palmtechniq.com/courses/cybersecurity', 
-      name: 'Cybersecurity' 
-    },
-    'Backend Developer': { 
-      link: 'https://www.palmtechniq.com/courses/web-development', 
-      name: 'Web Development' 
-    },
-    'Product Manager': { 
-      link: 'https://www.palmtechniq.com/courses/project-management', 
-      name: 'Project Management' 
-    },
-    'AI/ML Engineer': { 
-      link: 'https://www.palmtechniq.com/courses/data-analytics', 
-      name: 'Data Analytics' 
-    },
-    'Full-Stack Developer': { 
-      link: 'https://www.palmtechniq.com/courses/web-development', 
-      name: 'Web Development' 
-    }
+    'Data Analytics': 'https://www.palmtechniq.com/courses/data-analytics',
+    'Web Development': 'https://www.palmtechniq.com/courses/web-development',
+    'Smart-home Automation': 'https://www.palmtechniq.com/courses/smart-home-automation',
+    'Cybersecurity': 'https://www.palmtechniq.com/courses/cybersecurity',
+    'Graphic Design': 'https://www.palmtechniq.com/courses/graphic-design',
+    'UI/UX Design': 'https://www.palmtechniq.com/courses/ui-ux-designing',
+    'Mobile App Development': 'https://www.palmtechniq.com/courses/mobile-app-development',
+    'Digital Marketing': 'https://www.palmtechniq.com/courses/digital-marketing',
+    'Video Editing': 'https://www.palmtechniq.com/courses/video-editing',
+    'Project Management': 'https://www.palmtechniq.com/courses/project-management'
   };
 
   const questions = [
@@ -93,22 +92,23 @@ const Index = () => {
       key: 'name' as keyof FormData,
       label: 'Name',
       type: 'text',
-      placeholder: 'Enter your name',
+      placeholder: 'Your name',
       required: true
     },
     {
       key: 'whatsappNumber' as keyof FormData,
       label: 'WhatsApp Number',
       type: 'text',
-      placeholder: 'Enter your WhatsApp number (e.g., +1234567890)',
+      placeholder: 'e.g., +2349123456789',
       required: true
     },
     {
       key: 'activities' as keyof FormData,
       label: 'What activities do you enjoy most?',
       type: 'select',
-      options: ['Creating visuals', 'Solving puzzles', 'Helping people', 'Organizing things', 'Other'],
-      required: true
+      options: ['Creating visuals', 'Solving technical problems', 'Helping people', 'Organizing tasks', 'Building physical devices', 'Promoting or marketing', 'Editing videos', 'Other'],
+      required: true,
+      conditionalField: 'activitiesOther'
     },
     {
       key: 'preference' as keyof FormData,
@@ -119,9 +119,17 @@ const Index = () => {
     },
     {
       key: 'project' as keyof FormData,
-      label: 'What kind of tech project excites you?',
+      label: 'What kind of tech project excites you most?',
       type: 'select',
-      options: ['Data analysis', 'Apps/websites', 'Security/hacking', 'AI/chatbots', 'Other'],
+      options: ['Creative projects (design, video)', 'Technical projects (coding, cybersecurity)', 'Management/marketing projects', 'Smart devices or IoT', 'Other'],
+      required: true,
+      conditionalField: 'projectOther'
+    },
+    {
+      key: 'workFocus' as keyof FormData,
+      label: 'Do you prefer working on creative designs, technical systems, or managing processes?',
+      type: 'select',
+      options: ['Creative designs', 'Technical systems', 'Managing processes', 'Not sure'],
       required: true
     },
     {
@@ -135,22 +143,39 @@ const Index = () => {
       key: 'skills' as keyof FormData,
       label: 'What are you good at from past work or school?',
       type: 'select',
-      options: ['Communication', 'Numbers/math', 'Planning', 'Design/creativity', 'Other'],
-      required: true
+      options: ['Communication', 'Numbers/math', 'Planning', 'Design/creativity', 'Technical troubleshooting', 'Marketing', 'Video editing', 'Other'],
+      required: true,
+      conditionalField: 'skillsOther'
     },
     {
       key: 'tools' as keyof FormData,
-      label: 'Have you used tools like Excel, Google Sheets, or design apps?',
+      label: 'Have you used tools like Excel, Google Sheets, design apps, or coding platforms?',
       type: 'select',
       options: ['Yes', 'No'],
       required: true
     },
     {
-      key: 'problemSolving' as keyof FormData,
-      label: 'Are you good at spotting details or fixing problems?',
+      key: 'strength' as keyof FormData,
+      label: 'Are you good at spotting details, fixing problems, or leading teams?',
       type: 'select',
-      options: ['Details', 'Fixing problems', 'Both', 'Neither'],
+      options: ['Spotting details', 'Fixing problems', 'Leading teams', 'None of these'],
       required: true
+    },
+    {
+      key: 'techExposure' as keyof FormData,
+      label: 'Have you ever tried any tech-related activities (e.g., coding, designing, or managing projects)?',
+      type: 'select',
+      options: ['Yes, a little', 'No, never', 'Other'],
+      required: true,
+      conditionalField: 'techExposureOther'
+    },
+    {
+      key: 'motivation' as keyof FormData,
+      label: 'What motivates you to enter tech?',
+      type: 'select',
+      options: ['High-paying jobs', 'Creative expression', 'Solving real-world problems', 'Other'],
+      required: true,
+      conditionalField: 'motivationOther'
     },
     {
       key: 'studyHours' as keyof FormData,
@@ -161,7 +186,7 @@ const Index = () => {
     },
     {
       key: 'device' as keyof FormData,
-      label: 'What device do you use?',
+      label: 'What device do you use most for learning?',
       type: 'select',
       options: ['Smartphone', 'Laptop', 'Both'],
       required: true
@@ -170,118 +195,203 @@ const Index = () => {
       key: 'learningStyle' as keyof FormData,
       label: 'How do you learn best?',
       type: 'select',
-      options: ['Videos', 'Reading', 'Projects', 'Classes', 'Other'],
-      required: true
-    },
-    {
-      key: 'courseStyle' as keyof FormData,
-      label: 'Do you prefer structured courses or self-paced?',
-      type: 'select',
-      options: ['Structured', 'Self-paced', 'Both'],
-      required: true
+      options: ['Videos', 'Reading', 'Hands-on projects', 'Classes', 'Other'],
+      required: true,
+      conditionalField: 'learningStyleOther'
     }
   ];
 
   const getCareerRecommendations = (data: FormData): CareerRecommendation[] => {
     const recommendations: CareerRecommendation[] = [];
 
-    // Frontend Development
-    if ((data.activities === 'Creating visuals' || data.skills === 'Design/creativity') && 
-        (data.preference === 'Look good' || data.preference === 'Both') && 
-        data.project === 'Apps/websites') {
-      recommendations.push({
-        title: 'Frontend Developer',
-        description: 'Create beautiful, interactive user interfaces for websites and applications.',
-        icon: <Palette className="w-8 h-8 text-blue-500" />,
-        skills: ['HTML/CSS', 'JavaScript', 'React', 'Design'],
-        timeToStart: '3-6 months',
-        courseLink: courseMapping['Frontend Developer'].link,
-        courseName: courseMapping['Frontend Developer'].name
-      });
-    }
-
-    // Data Analysis
-    if ((data.activities === 'Solving puzzles' || data.skills === 'Numbers/math') && 
-        data.project === 'Data analysis' && data.problemSolving === 'Details') {
+    // Data Analytics paths
+    if ((data.skills === 'Numbers/math' || data.activities === 'Solving technical problems') && 
+        data.strength === 'Spotting details') {
       recommendations.push({
         title: 'Data Analyst',
-        description: 'Turn data into insights that drive business decisions.',
-        icon: <BarChart3 className="w-8 h-8 text-green-500" />,
-        skills: ['SQL', 'Python', 'Excel', 'Statistics'],
-        timeToStart: '2-4 months',
-        courseLink: courseMapping['Data Analyst'].link,
-        courseName: courseMapping['Data Analyst'].name
+        description: 'Analyzes datasets to uncover trends and insights, using tools like Excel, Tableau, or Python.',
+        icon: <BarChart3 className="w-8 h-8 text-blue-500" />,
+        skills: ['Excel', 'Python', 'Tableau', 'Statistics'],
+        salary: '₦3-6M/year',
+        courseLink: courseMapping['Data Analytics'],
+        courseName: 'Data Analytics'
       });
     }
 
-    // Cybersecurity
-    if (data.project === 'Security/hacking' && data.problemSolving === 'Fixing problems') {
+    // Web Development paths
+    if ((data.project === 'Technical projects (coding, cybersecurity)' || data.workFocus === 'Technical systems') && 
+        data.preference === 'Work well') {
       recommendations.push({
-        title: 'Cybersecurity Specialist',
-        description: 'Protect systems and data from digital threats.',
+        title: 'Back-End Developer',
+        description: 'Manages server-side logic and databases using Python or Node.js.',
+        icon: <Code className="w-8 h-8 text-green-500" />,
+        skills: ['Python', 'Node.js', 'Databases', 'APIs'],
+        salary: '₦4-8M/year',
+        courseLink: courseMapping['Web Development'],
+        courseName: 'Web Development'
+      });
+    }
+
+    if ((data.workFocus === 'Creative designs' || data.preference === 'Look good') && 
+        data.activities === 'Creating visuals') {
+      recommendations.push({
+        title: 'Front-End Developer',
+        description: 'Builds user-facing website elements using HTML, CSS, and JavaScript.',
+        icon: <Palette className="w-8 h-8 text-purple-500" />,
+        skills: ['HTML', 'CSS', 'JavaScript', 'React'],
+        salary: '₦4-8M/year',
+        courseLink: courseMapping['Web Development'],
+        courseName: 'Web Development'
+      });
+    }
+
+    // Cybersecurity paths
+    if (data.project === 'Technical projects (coding, cybersecurity)' && 
+        data.strength === 'Fixing problems') {
+      recommendations.push({
+        title: 'Cybersecurity Analyst',
+        description: 'Protects systems from threats by identifying vulnerabilities.',
         icon: <Shield className="w-8 h-8 text-red-500" />,
-        skills: ['Network Security', 'Ethical Hacking', 'Risk Assessment'],
-        timeToStart: '4-8 months',
-        courseLink: courseMapping['Cybersecurity Specialist'].link,
-        courseName: courseMapping['Cybersecurity Specialist'].name
+        skills: ['Network Security', 'Threat Analysis', 'Firewalls'],
+        salary: '₦5-10M/year',
+        courseLink: courseMapping['Cybersecurity'],
+        courseName: 'Cybersecurity'
       });
     }
 
-    // Backend Development
-    if ((data.preference === 'Work well' || data.preference === 'Both') && 
-        data.activities === 'Solving puzzles' && data.project === 'Apps/websites') {
+    // Graphic Design paths
+    if ((data.activities === 'Creating visuals' || data.skills === 'Design/creativity') && 
+        data.workFocus === 'Creative designs') {
       recommendations.push({
-        title: 'Backend Developer',
-        description: 'Build the server-side logic that powers applications.',
-        icon: <Code className="w-8 h-8 text-purple-500" />,
-        skills: ['Python/Java', 'Databases', 'APIs', 'Cloud'],
-        timeToStart: '4-6 months',
-        courseLink: courseMapping['Backend Developer'].link,
-        courseName: courseMapping['Backend Developer'].name
+        title: 'Graphic Designer',
+        description: 'Creates visuals like logos and marketing materials using Adobe Photoshop or Illustrator.',
+        icon: <Palette className="w-8 h-8 text-pink-500" />,
+        skills: ['Photoshop', 'Illustrator', 'Brand Design', 'Typography'],
+        salary: '₦2-5M/year',
+        courseLink: courseMapping['Graphic Design'],
+        courseName: 'Graphic Design'
       });
     }
 
-    // Product Management
-    if (data.activities === 'Helping people' && data.skills === 'Communication' && 
+    // UI/UX Design paths
+    if (data.workFocus === 'Creative designs' && data.preference === 'Both') {
+      recommendations.push({
+        title: 'UI/UX Designer',
+        description: 'Designs visually appealing and user-friendly app or website interfaces.',
+        icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
+        skills: ['Figma', 'User Research', 'Wireframing', 'Prototyping'],
+        salary: '₦4-7M/year',
+        courseLink: courseMapping['UI/UX Design'],
+        courseName: 'UI/UX Design'
+      });
+    }
+
+    // Mobile App Development paths
+    if (data.project === 'Technical projects (coding, cybersecurity)' && 
+        data.device === 'Smartphone') {
+      recommendations.push({
+        title: 'Mobile App Developer',
+        description: 'Builds apps for iOS or Android using Swift or Kotlin.',
+        icon: <Smartphone className="w-8 h-8 text-blue-600" />,
+        skills: ['Swift', 'Kotlin', 'React Native', 'Mobile UI'],
+        salary: '₦5-9M/year',
+        courseLink: courseMapping['Mobile App Development'],
+        courseName: 'Mobile App Development'
+      });
+    }
+
+    // Digital Marketing paths
+    if ((data.activities === 'Promoting or marketing' || data.skills === 'Marketing') && 
+        data.workFocus === 'Managing processes') {
+      recommendations.push({
+        title: 'Digital Marketing Specialist',
+        description: 'Runs online campaigns using SEO, social media, or Google Ads.',
+        icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
+        skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
+        salary: '₦3-6M/year',
+        courseLink: courseMapping['Digital Marketing'],
+        courseName: 'Digital Marketing'
+      });
+    }
+
+    // Video Editing paths
+    if ((data.activities === 'Editing videos' || data.skills === 'Video editing') && 
+        data.workFocus === 'Creative designs') {
+      recommendations.push({
+        title: 'Video Editor',
+        description: 'Edits videos for ads, social media, or films using Adobe Premiere or Final Cut Pro.',
+        icon: <Video className="w-8 h-8 text-red-600" />,
+        skills: ['Adobe Premiere', 'Final Cut Pro', 'Motion Graphics', 'Color Grading'],
+        salary: '₦2-5M/year',
+        courseLink: courseMapping['Video Editing'],
+        courseName: 'Video Editing'
+      });
+    }
+
+    // Project Management paths
+    if ((data.skills === 'Planning' || data.strength === 'Leading teams') && 
         data.workStyle === 'Variety') {
       recommendations.push({
-        title: 'Product Manager',
-        description: 'Bridge technical teams and business needs to create successful products.',
-        icon: <Users className="w-8 h-8 text-orange-500" />,
-        skills: ['Strategy', 'Communication', 'Analytics', 'User Research'],
-        timeToStart: '2-3 months',
-        courseLink: courseMapping['Product Manager'].link,
-        courseName: courseMapping['Product Manager'].name
+        title: 'Project Manager',
+        description: 'Oversees tech projects, coordinating teams and timelines.',
+        icon: <Users className="w-8 h-8 text-green-600" />,
+        skills: ['Project Planning', 'Team Leadership', 'Agile', 'Communication'],
+        salary: '₦5-10M/year',
+        courseLink: courseMapping['Project Management'],
+        courseName: 'Project Management'
       });
     }
 
-    // AI/ML Engineer
-    if (data.project === 'AI/chatbots' && data.skills === 'Numbers/math') {
+    // Smart-home Automation paths
+    if (data.activities === 'Building physical devices' || data.project === 'Smart devices or IoT') {
       recommendations.push({
-        title: 'AI/ML Engineer',
-        description: 'Build intelligent systems that can learn and make decisions.',
-        icon: <Brain className="w-8 h-8 text-indigo-500" />,
-        skills: ['Python', 'Machine Learning', 'Statistics', 'Neural Networks'],
-        timeToStart: '6-12 months',
-        courseLink: courseMapping['AI/ML Engineer'].link,
-        courseName: courseMapping['AI/ML Engineer'].name
+        title: 'IoT Developer',
+        description: 'Designs and programs smart devices like home security systems using IoT platforms.',
+        icon: <Home className="w-8 h-8 text-teal-500" />,
+        skills: ['IoT Platforms', 'Arduino', 'Raspberry Pi', 'Sensors'],
+        salary: '₦4-7M/year',
+        courseLink: courseMapping['Smart-home Automation'],
+        courseName: 'Smart-home Automation'
       });
     }
 
-    // Default recommendation if no specific matches
-    if (recommendations.length === 0) {
-      recommendations.push({
-        title: 'Full-Stack Developer',
-        description: 'Work on both frontend and backend to build complete applications.',
-        icon: <Code className="w-8 h-8 text-blue-500" />,
-        skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
-        timeToStart: '6-9 months',
-        courseLink: courseMapping['Full-Stack Developer'].link,
-        courseName: courseMapping['Full-Stack Developer'].name
-      });
+    // Ensure at least 2 recommendations
+    if (recommendations.length < 2) {
+      if (recommendations.length === 0) {
+        recommendations.push(
+          {
+            title: 'Full-Stack Developer',
+            description: 'Handles both front-end and back-end, creating complete web apps.',
+            icon: <Code className="w-8 h-8 text-blue-500" />,
+            skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
+            salary: '₦6-12M/year',
+            courseLink: courseMapping['Web Development'],
+            courseName: 'Web Development'
+          },
+          {
+            title: 'Digital Marketing Specialist',
+            description: 'Runs online campaigns using SEO, social media, or Google Ads.',
+            icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
+            skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
+            salary: '₦3-6M/year',
+            courseLink: courseMapping['Digital Marketing'],
+            courseName: 'Digital Marketing'
+          }
+        );
+      } else {
+        recommendations.push({
+          title: 'UI/UX Designer',
+          description: 'Designs visually appealing and user-friendly app or website interfaces.',
+          icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
+          skills: ['Figma', 'User Research', 'Wireframing', 'Prototyping'],
+          salary: '₦4-7M/year',
+          courseLink: courseMapping['UI/UX Design'],
+          courseName: 'UI/UX Design'
+        });
+      }
     }
 
-    return recommendations.slice(0, 3); // Return top 3 recommendations
+    return recommendations.slice(0, 3);
   };
 
   const submitFormData = async (data: FormData, recommendations: CareerRecommendation[]) => {
@@ -294,39 +404,50 @@ const Index = () => {
           title: rec.title,
           description: rec.description,
           skills: rec.skills,
-          timeToStart: rec.timeToStart
+          salary: rec.salary
         })),
         submittedAt: new Date().toISOString()
       };
 
-      const response = await fetch('https://kindness300m2.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-      });
+      // Submit to both webhooks
+      const webhookUrls = [
+        'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0',
+        'https://kindness300mjuly.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0'
+      ];
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form data');
-      }
+      const submissions = webhookUrls.map(url => 
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        })
+      );
 
-      const result = await response.text();
-      console.log('Webhook response:', result);
+      const responses = await Promise.allSettled(submissions);
       
-      // Parse JSON response and extract recommendation text
-      try {
-        const jsonResponse = JSON.parse(result);
-        if (jsonResponse.recommendation) {
-          setAiResponse(jsonResponse.recommendation);
-        } else {
-          // If no recommendation field, use the entire response
-          setAiResponse(result);
+      // Use the first successful response for AI response
+      for (let i = 0; i < responses.length; i++) {
+        if (responses[i].status === 'fulfilled') {
+          const response = (responses[i] as PromiseFulfilledResult<Response>).value;
+          if (response.ok) {
+            const result = await response.text();
+            console.log(`Webhook ${i + 1} response:`, result);
+            
+            try {
+              const jsonResponse = JSON.parse(result);
+              if (jsonResponse.recommendation) {
+                setAiResponse(jsonResponse.recommendation);
+              } else {
+                setAiResponse(result);
+              }
+            } catch (parseError) {
+              setAiResponse(result);
+            }
+            break;
+          }
         }
-      } catch (parseError) {
-        // If it's not JSON, use the raw text
-        console.log('Response is not JSON, using raw text');
-        setAiResponse(result);
       }
 
       console.log('Form data submitted successfully');
@@ -336,7 +457,6 @@ const Index = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      // Set a default AI response in case of error
       setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
       toast({
         title: "Submission Error",
@@ -373,11 +493,9 @@ const Index = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Generate recommendations
       const recs = getCareerRecommendations(formData);
       setRecommendations(recs);
       
-      // Submit form data to webhook
       await submitFormData(formData, recs);
       
       setShowResults(true);
@@ -399,16 +517,24 @@ const Index = () => {
       name: '',
       whatsappNumber: '',
       activities: '',
+      activitiesOther: '',
       preference: '',
       project: '',
+      projectOther: '',
+      workFocus: '',
       workStyle: '',
       skills: '',
+      skillsOther: '',
       tools: '',
-      problemSolving: '',
+      strength: '',
+      techExposure: '',
+      techExposureOther: '',
+      motivation: '',
+      motivationOther: '',
       studyHours: '',
       device: '',
       learningStyle: '',
-      courseStyle: ''
+      learningStyleOther: ''
     });
     setCurrentStep(0);
     setShowResults(false);
@@ -433,7 +559,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Main Results Section - Split into two parts */}
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 mb-8">
               
@@ -466,7 +591,7 @@ const Index = () => {
               <div className="lg:col-span-1">
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Career Paths</h2>
-                  {recommendations.slice(0, 3).map((rec, index) => (
+                  {recommendations.map((rec, index) => (
                     <Card key={index} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
@@ -489,8 +614,8 @@ const Index = () => {
                             </div>
                             
                             <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-200">
-                              <span className="text-xs text-gray-600">Time to start:</span>
-                              <span className="font-semibold text-green-600 text-sm">{rec.timeToStart}</span>
+                              <span className="text-xs text-gray-600">Average salary:</span>
+                              <span className="font-semibold text-green-600 text-sm">{rec.salary}</span>
                             </div>
                             
                             <Button 
@@ -605,6 +730,26 @@ const Index = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  
+                  {/* Conditional "Other" input */}
+                  {currentQuestion.conditionalField && formData[currentQuestion.key] === 'Other' && (
+                    <div className="mt-2">
+                      <Input
+                        placeholder={
+                          currentQuestion.conditionalField === 'activitiesOther' ? 'Describe what you enjoy' :
+                          currentQuestion.conditionalField === 'projectOther' ? 'Describe the project' :
+                          currentQuestion.conditionalField === 'skillsOther' ? 'Describe your skill' :
+                          currentQuestion.conditionalField === 'techExposureOther' ? 'Describe your tech experience' :
+                          currentQuestion.conditionalField === 'motivationOther' ? 'Describe your motivation' :
+                          currentQuestion.conditionalField === 'learningStyleOther' ? 'Describe how you learn' :
+                          'Please specify'
+                        }
+                        value={formData[currentQuestion.conditionalField as keyof FormData]}
+                        onChange={(e) => handleInputChange(currentQuestion.conditionalField as keyof FormData, e.target.value)}
+                        className="border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -622,7 +767,7 @@ const Index = () => {
                   disabled={isSubmitting}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 flex items-center gap-2"
                 >
-                  {isSubmitting ? 'Submitting...' : (currentStep === questions.length - 1 ? 'Get Results' : 'Next')}
+                  {isSubmitting ? 'Submitting...' : (currentStep === questions.length - 1 ? 'Discover My Tech Path' : 'Next')}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
