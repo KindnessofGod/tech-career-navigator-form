@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -572,40 +571,81 @@ const Index = () => {
             console.log(`Webhook ${i + 1} response:`, result);
             
             try {
+              // Try to parse as JSON first
               const jsonResponse = JSON.parse(result);
               console.log('Parsed JSON response:', jsonResponse);
               
-              // Extract recommendation text
+              // Extract recommendation text (could be HTML)
               if (jsonResponse.Recommendation) {
                 console.log('Setting AI response:', jsonResponse.Recommendation);
                 setAiResponse(jsonResponse.Recommendation);
-              } else {
-                console.log('No Recommendation in response, setting fallback');
-                setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
+              } else if (jsonResponse.recommendation) {
+                console.log('Setting AI response from lowercase:', jsonResponse.recommendation);
+                setAiResponse(jsonResponse.recommendation);
               }
               
               // Extract careers array
               if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
                 console.log('Setting visible careers:', jsonResponse.Careers);
                 setVisibleCareers(jsonResponse.Careers);
-              } else {
-                console.log('No Careers array found, using fallback');
-                // Fallback to show some careers based on user preferences
-                const fallbackCareers = ['iot-developer', 'smart-home-technician', 'automation-consultant'];
-                setVisibleCareers(fallbackCareers);
+              } else if (jsonResponse.careers && Array.isArray(jsonResponse.careers)) {
+                console.log('Setting visible careers from lowercase:', jsonResponse.careers);
+                setVisibleCareers(jsonResponse.careers);
               }
               
               responseFound = true;
               break;
             } catch (parseError) {
               console.error('Failed to parse JSON response:', parseError);
-              // Fallback if not JSON
-              setAiResponse(result || "Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-              // Set some default careers
-              const fallbackCareers = ['iot-developer', 'smart-home-technician'];
-              setVisibleCareers(fallbackCareers);
-              responseFound = true;
-              break;
+              // If not JSON, check if it's a structured text response
+              if (result.includes('Recommendation:') && result.includes('careers')) {
+                const lines = result.split('\n');
+                let recommendation = '';
+                let careers = [];
+                let isReadingRecommendation = false;
+                let isReadingCareers = false;
+                
+                for (let line of lines) {
+                  line = line.trim();
+                  if (line.startsWith('Recommendation:')) {
+                    isReadingRecommendation = true;
+                    isReadingCareers = false;
+                    recommendation = line.replace('Recommendation:', '').trim();
+                  } else if (line.toLowerCase().startsWith('careers') || line.toLowerCase().startsWith('career')) {
+                    isReadingRecommendation = false;
+                    isReadingCareers = true;
+                  } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
+                    recommendation += ' ' + line;
+                  } else if (isReadingCareers && line) {
+                    // Parse career lines like "0:Cybersecurity Analyst"
+                    if (line.includes(':')) {
+                      const careerName = line.split(':')[1].trim();
+                      careers.push(careerName);
+                    } else if (line.length > 0) {
+                      careers.push(line);
+                    }
+                  }
+                }
+                
+                console.log('Parsed recommendation:', recommendation);
+                console.log('Parsed careers:', careers);
+                
+                if (recommendation) {
+                  setAiResponse(recommendation);
+                }
+                if (careers.length > 0) {
+                  setVisibleCareers(careers);
+                }
+                responseFound = true;
+                break;
+              } else {
+                // Fallback if not structured
+                setAiResponse(result || "Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
+                const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
+                setVisibleCareers(fallbackCareers);
+                responseFound = true;
+                break;
+              }
             }
           }
         }
@@ -614,13 +654,7 @@ const Index = () => {
       if (!responseFound) {
         console.log('No successful response, using fallback data');
         setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-        // Set fallback careers based on user's project preference
-        let fallbackCareers = ['iot-developer', 'smart-home-technician'];
-        if (data.project === 'Creative projects (design, video)') {
-          fallbackCareers = ['graphic-designer', 'ui-designer', 'video-editor'];
-        } else if (data.project === 'Technical projects (coding, cybersecurity)') {
-          fallbackCareers = ['front-end-developer', 'cybersecurity-analyst'];
-        }
+        const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
         setVisibleCareers(fallbackCareers);
       }
 
@@ -632,8 +666,7 @@ const Index = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-      // Set fallback careers
-      const fallbackCareers = ['iot-developer', 'smart-home-technician'];
+      const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
       setVisibleCareers(fallbackCareers);
       toast({
         title: "Submission Error",
@@ -715,10 +748,12 @@ const Index = () => {
     setVisibleCareers([]);
   };
 
-  // Filter visible careers based on API response
+  // Filter visible careers based on API response - match by title exactly
   const displayedCareers = allCareers.filter(career => {
-    console.log('Checking career:', career.id, 'against visible careers:', visibleCareers);
-    return visibleCareers.includes(career.id) || visibleCareers.includes(career.title);
+    console.log('Checking career:', career.title, 'against visible careers:', visibleCareers);
+    return visibleCareers.some(visibleCareer => 
+      visibleCareer.trim().toLowerCase() === career.title.trim().toLowerCase()
+    );
   });
 
   console.log('Displayed careers:', displayedCareers);
