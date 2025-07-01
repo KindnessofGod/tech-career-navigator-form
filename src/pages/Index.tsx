@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -541,6 +542,8 @@ const Index = () => {
         submittedAt: new Date().toISOString()
       };
 
+      console.log('Submitting form data:', payload);
+
       // Submit to both webhooks
       const webhookUrls = [
         'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0',
@@ -560,6 +563,7 @@ const Index = () => {
       const responses = await Promise.allSettled(submissions);
       
       // Use the first successful response for AI response
+      let responseFound = false;
       for (let i = 0; i < responses.length; i++) {
         if (responses[i].status === 'fulfilled') {
           const response = (responses[i] as PromiseFulfilledResult<Response>).value;
@@ -569,25 +573,55 @@ const Index = () => {
             
             try {
               const jsonResponse = JSON.parse(result);
+              console.log('Parsed JSON response:', jsonResponse);
               
               // Extract recommendation text
               if (jsonResponse.Recommendation) {
+                console.log('Setting AI response:', jsonResponse.Recommendation);
                 setAiResponse(jsonResponse.Recommendation);
+              } else {
+                console.log('No Recommendation in response, setting fallback');
+                setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
               }
               
               // Extract careers array
               if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
+                console.log('Setting visible careers:', jsonResponse.Careers);
                 setVisibleCareers(jsonResponse.Careers);
+              } else {
+                console.log('No Careers array found, using fallback');
+                // Fallback to show some careers based on user preferences
+                const fallbackCareers = ['iot-developer', 'smart-home-technician', 'automation-consultant'];
+                setVisibleCareers(fallbackCareers);
               }
               
+              responseFound = true;
+              break;
             } catch (parseError) {
-              // Fallback if not JSON
-              setAiResponse(result);
               console.error('Failed to parse JSON response:', parseError);
+              // Fallback if not JSON
+              setAiResponse(result || "Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
+              // Set some default careers
+              const fallbackCareers = ['iot-developer', 'smart-home-technician'];
+              setVisibleCareers(fallbackCareers);
+              responseFound = true;
+              break;
             }
-            break;
           }
         }
+      }
+
+      if (!responseFound) {
+        console.log('No successful response, using fallback data');
+        setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
+        // Set fallback careers based on user's project preference
+        let fallbackCareers = ['iot-developer', 'smart-home-technician'];
+        if (data.project === 'Creative projects (design, video)') {
+          fallbackCareers = ['graphic-designer', 'ui-designer', 'video-editor'];
+        } else if (data.project === 'Technical projects (coding, cybersecurity)') {
+          fallbackCareers = ['front-end-developer', 'cybersecurity-analyst'];
+        }
+        setVisibleCareers(fallbackCareers);
       }
 
       console.log('Form data submitted successfully');
@@ -598,6 +632,9 @@ const Index = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
+      // Set fallback careers
+      const fallbackCareers = ['iot-developer', 'smart-home-technician'];
+      setVisibleCareers(fallbackCareers);
       toast({
         title: "Submission Error",
         description: "There was an error submitting your form. Please try again.",
@@ -679,9 +716,12 @@ const Index = () => {
   };
 
   // Filter visible careers based on API response
-  const displayedCareers = allCareers.filter(career => 
-    visibleCareers.includes(career.id) || visibleCareers.includes(career.title)
-  );
+  const displayedCareers = allCareers.filter(career => {
+    console.log('Checking career:', career.id, 'against visible careers:', visibleCareers);
+    return visibleCareers.includes(career.id) || visibleCareers.includes(career.title);
+  });
+
+  console.log('Displayed careers:', displayedCareers);
 
   if (showResults) {
     return (
@@ -705,79 +745,89 @@ const Index = () => {
               
               {/* Left Side - AI Response Section */}
               <div className="lg:col-span-1">
-                {aiResponse && (
-                  <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg h-full">
-                    <CardHeader>
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
-                          <MessageSquare className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
-                          <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
-                        </div>
+                <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
+                        <MessageSquare className="w-6 h-6 text-blue-600" />
                       </div>
-                    </CardHeader>
-                    <CardContent>
+                      <div>
+                        <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
+                        <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {aiResponse ? (
                       <div 
                         className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
                         dangerouslySetInnerHTML={{ __html: aiResponse }}
                       />
-                    </CardContent>
-                  </Card>
-                )}
+                    ) : (
+                      <div className="text-gray-600">
+                        <p>Analyzing your responses...</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Right Side - Career Path Cards */}
               <div className="lg:col-span-1">
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Career Paths</h2>
-                  {displayedCareers.map((career) => (
-                    <Card key={career.id} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md flex-shrink-0">
-                            {career.icon}
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-lg font-bold text-blue-800 mb-2">{career.title}</h3>
-                            <p className="text-gray-600 text-sm mb-3">{career.description}</p>
-                            
-                            <div className="mb-3">
-                              <h4 className="font-semibold text-gray-700 text-sm mb-2">Key Skills:</h4>
-                              <div className="flex flex-wrap gap-1">
-                                {career.skills.map((skill, skillIndex) => (
-                                  <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                                    {skill}
-                                  </span>
-                                ))}
-                              </div>
+                  {displayedCareers.length > 0 ? (
+                    displayedCareers.map((career) => (
+                      <Card key={career.id} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                        <CardContent className="p-6">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md flex-shrink-0">
+                              {career.icon}
                             </div>
-                            
-                            <div className="grid grid-cols-2 gap-2 mb-3 pt-2 border-t border-gray-200">
-                              <div className="text-xs">
-                                <span className="text-gray-600">Salary:</span>
-                                <div className="font-semibold text-green-600">{career.salary}</div>
+                            <div className="flex-1">
+                              <h3 className="text-lg font-bold text-blue-800 mb-2">{career.title}</h3>
+                              <p className="text-gray-600 text-sm mb-3">{career.description}</p>
+                              
+                              <div className="mb-3">
+                                <h4 className="font-semibold text-gray-700 text-sm mb-2">Key Skills:</h4>
+                                <div className="flex flex-wrap gap-1">
+                                  {career.skills.map((skill, skillIndex) => (
+                                    <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                      {skill}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
-                              <div className="text-xs">
-                                <span className="text-gray-600">Duration:</span>
-                                <div className="font-semibold text-blue-600">{career.duration}</div>
+                              
+                              <div className="grid grid-cols-2 gap-2 mb-3 pt-2 border-t border-gray-200">
+                                <div className="text-xs">
+                                  <span className="text-gray-600">Salary:</span>
+                                  <div className="font-semibold text-green-600">{career.salary}</div>
+                                </div>
+                                <div className="text-xs">
+                                  <span className="text-gray-600">Duration:</span>
+                                  <div className="font-semibold text-blue-600">{career.duration}</div>
+                                </div>
                               </div>
+                              
+                              <Button 
+                                asChild
+                                className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold text-sm py-2"
+                              >
+                                <a href={career.courseLink} target="_blank" rel="noopener noreferrer">
+                                  Enroll in {career.courseName}
+                                </a>
+                              </Button>
                             </div>
-                            
-                            <Button 
-                              asChild
-                              className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold text-sm py-2"
-                            >
-                              <a href={career.courseLink} target="_blank" rel="noopener noreferrer">
-                                Enroll in {career.courseName}
-                              </a>
-                            </Button>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-600">
+                      <p>Loading your personalized career recommendations...</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
