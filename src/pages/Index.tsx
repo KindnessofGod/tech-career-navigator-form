@@ -570,81 +570,64 @@ const Index = () => {
             const result = await response.text();
             console.log(`Webhook ${i + 1} response:`, result);
             
-            try {
-              // Try to parse as JSON first
-              const jsonResponse = JSON.parse(result);
-              console.log('Parsed JSON response:', jsonResponse);
+            // Parse the structured text response
+            if (result.includes('Recommendation:') && result.includes('careers')) {
+              const lines = result.split('\n');
+              let recommendation = '';
+              let careers: string[] = [];
+              let isReadingRecommendation = false;
+              let isReadingCareers = false;
               
-              // Extract recommendation text (could be HTML)
-              if (jsonResponse.Recommendation) {
-                console.log('Setting AI response:', jsonResponse.Recommendation);
-                setAiResponse(jsonResponse.Recommendation);
-              } else if (jsonResponse.recommendation) {
-                console.log('Setting AI response from lowercase:', jsonResponse.recommendation);
-                setAiResponse(jsonResponse.recommendation);
-              }
-              
-              // Extract careers array
-              if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
-                console.log('Setting visible careers:', jsonResponse.Careers);
-                setVisibleCareers(jsonResponse.Careers);
-              } else if (jsonResponse.careers && Array.isArray(jsonResponse.careers)) {
-                console.log('Setting visible careers from lowercase:', jsonResponse.careers);
-                setVisibleCareers(jsonResponse.careers);
-              }
-              
-              responseFound = true;
-              break;
-            } catch (parseError) {
-              console.error('Failed to parse JSON response:', parseError);
-              // If not JSON, check if it's a structured text response
-              if (result.includes('Recommendation:') && result.includes('careers')) {
-                const lines = result.split('\n');
-                let recommendation = '';
-                let careers = [];
-                let isReadingRecommendation = false;
-                let isReadingCareers = false;
+              for (let line of lines) {
+                line = line.trim();
                 
-                for (let line of lines) {
-                  line = line.trim();
-                  if (line.startsWith('Recommendation:')) {
-                    isReadingRecommendation = true;
-                    isReadingCareers = false;
-                    recommendation = line.replace('Recommendation:', '').trim();
-                  } else if (line.toLowerCase().startsWith('careers') || line.toLowerCase().startsWith('career')) {
-                    isReadingRecommendation = false;
-                    isReadingCareers = true;
-                  } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
-                    recommendation += ' ' + line;
-                  } else if (isReadingCareers && line) {
-                    // Parse career lines like "0:Cybersecurity Analyst"
-                    if (line.includes(':')) {
-                      const careerName = line.split(':')[1].trim();
+                if (line.startsWith('Recommendation:')) {
+                  isReadingRecommendation = true;
+                  isReadingCareers = false;
+                  recommendation = line.replace('Recommendation:', '').trim();
+                } else if (line.toLowerCase() === 'careers') {
+                  isReadingRecommendation = false;
+                  isReadingCareers = true;
+                } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
+                  recommendation += line;
+                } else if (isReadingCareers && line) {
+                  // Parse career lines like "0:Cybersecurity Analyst"
+                  if (line.includes(':')) {
+                    const careerName = line.split(':').slice(1).join(':').trim();
+                    if (careerName) {
                       careers.push(careerName);
-                    } else if (line.length > 0) {
-                      careers.push(line);
                     }
                   }
                 }
+              }
+              
+              console.log('Parsed recommendation:', recommendation);
+              console.log('Parsed careers:', careers);
+              
+              if (recommendation) {
+                setAiResponse(recommendation);
+              }
+              if (careers.length > 0) {
+                setVisibleCareers(careers);
+              }
+              responseFound = true;
+              break;
+            } else {
+              // Try JSON parsing as fallback
+              try {
+                const jsonResponse = JSON.parse(result);
+                console.log('Parsed JSON response:', jsonResponse);
                 
-                console.log('Parsed recommendation:', recommendation);
-                console.log('Parsed careers:', careers);
-                
-                if (recommendation) {
-                  setAiResponse(recommendation);
+                if (jsonResponse.Recommendation) {
+                  setAiResponse(jsonResponse.Recommendation);
                 }
-                if (careers.length > 0) {
-                  setVisibleCareers(careers);
+                if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
+                  setVisibleCareers(jsonResponse.Careers);
                 }
                 responseFound = true;
                 break;
-              } else {
-                // Fallback if not structured
-                setAiResponse(result || "Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-                const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
-                setVisibleCareers(fallbackCareers);
-                responseFound = true;
-                break;
+              } catch (parseError) {
+                console.error('Failed to parse response:', parseError);
               }
             }
           }
