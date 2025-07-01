@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,12 +31,14 @@ interface FormData {
   learningStyleOther: string;
 }
 
-interface CareerRecommendation {
+interface CareerCard {
+  id: string;
   title: string;
   description: string;
   icon: React.ReactNode;
   skills: string[];
   salary: string;
+  duration: string;
   courseLink: string;
   courseName: string;
 }
@@ -69,23 +70,353 @@ const Index = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [recommendations, setRecommendations] = useState<CareerRecommendation[]>([]);
   const [aiResponse, setAiResponse] = useState<string>('');
+  const [visibleCareers, setVisibleCareers] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Course mapping object
-  const courseMapping = {
-    'Data Analytics': 'https://www.palmtechniq.com/courses/data-analytics',
-    'Web Development': 'https://www.palmtechniq.com/courses/web-development',
-    'Smart-home Automation': 'https://www.palmtechniq.com/courses/smart-home-automation',
-    'Cybersecurity': 'https://www.palmtechniq.com/courses/cybersecurity',
-    'Graphic Design': 'https://www.palmtechniq.com/courses/graphic-design',
-    'UI/UX Design': 'https://www.palmtechniq.com/courses/ui-ux-designing',
-    'Mobile App Development': 'https://www.palmtechniq.com/courses/mobile-app-development',
-    'Digital Marketing': 'https://www.palmtechniq.com/courses/digital-marketing',
-    'Video Editing': 'https://www.palmtechniq.com/courses/video-editing',
-    'Project Management': 'https://www.palmtechniq.com/courses/project-management'
-  };
+  // All 30 career cards
+  const allCareers: CareerCard[] = [
+    // Data Analytics
+    {
+      id: 'data-analyst',
+      title: 'Data Analyst',
+      description: 'Analyzes datasets to uncover trends and insights, using tools like Excel, Tableau, or Python.',
+      icon: <BarChart3 className="w-8 h-8 text-blue-500" />,
+      skills: ['Excel', 'Python', 'Tableau', 'Statistics'],
+      salary: '₦3-6M/year',
+      duration: '3-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
+      courseName: 'Data Analytics'
+    },
+    {
+      id: 'business-intelligence-analyst',
+      title: 'Business Intelligence Analyst',
+      description: 'Transforms data into actionable business strategies, creating reports and dashboards.',
+      icon: <BarChart3 className="w-8 h-8 text-green-500" />,
+      skills: ['SQL', 'Power BI', 'Business Analysis', 'Data Visualization'],
+      salary: '₦4-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
+      courseName: 'Data Analytics'
+    },
+    {
+      id: 'market-research-analyst',
+      title: 'Market Research Analyst',
+      description: 'Studies consumer behavior to inform marketing strategies, using data to predict trends.',
+      icon: <TrendingUp className="w-8 h-8 text-purple-500" />,
+      skills: ['Market Research', 'Statistics', 'Survey Design', 'Consumer Psychology'],
+      salary: '₦3-5M/year',
+      duration: '3-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
+      courseName: 'Data Analytics'
+    },
+    // Web Development
+    {
+      id: 'front-end-developer',
+      title: 'Front-End Developer',
+      description: 'Builds user-facing website elements using HTML, CSS, and JavaScript.',
+      icon: <Palette className="w-8 h-8 text-purple-500" />,
+      skills: ['HTML', 'CSS', 'JavaScript', 'React'],
+      salary: '₦4-8M/year',
+      duration: '4-8 months',
+      courseLink: 'https://www.palmtechniq.com/courses/web-development',
+      courseName: 'Web Development'
+    },
+    {
+      id: 'back-end-developer',
+      title: 'Back-End Developer',
+      description: 'Manages server-side logic and databases using Python or Node.js.',
+      icon: <Code className="w-8 h-8 text-green-500" />,
+      skills: ['Python', 'Node.js', 'Databases', 'APIs'],
+      salary: '₦4-8M/year',
+      duration: '6-10 months',
+      courseLink: 'https://www.palmtechniq.com/courses/web-development',
+      courseName: 'Web Development'
+    },
+    {
+      id: 'full-stack-developer',
+      title: 'Full-Stack Developer',
+      description: 'Handles both front-end and back-end, creating complete web apps.',
+      icon: <Code className="w-8 h-8 text-blue-500" />,
+      skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
+      salary: '₦6-12M/year',
+      duration: '8-12 months',
+      courseLink: 'https://www.palmtechniq.com/courses/web-development',
+      courseName: 'Web Development'
+    },
+    // Smart-home Automation
+    {
+      id: 'iot-developer',
+      title: 'IoT Developer',
+      description: 'Designs and programs smart devices like home security systems using IoT platforms.',
+      icon: <Home className="w-8 h-8 text-teal-500" />,
+      skills: ['IoT Platforms', 'Arduino', 'Raspberry Pi', 'Sensors'],
+      salary: '₦4-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
+      courseName: 'Smart-home Automation'
+    },
+    {
+      id: 'smart-home-technician',
+      title: 'Smart Home Technician',
+      description: 'Installs and maintains smart devices like thermostats or lighting systems.',
+      icon: <Zap className="w-8 h-8 text-yellow-500" />,
+      skills: ['Device Installation', 'Network Setup', 'Troubleshooting', 'Customer Service'],
+      salary: '₦2-4M/year',
+      duration: '2-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
+      courseName: 'Smart-home Automation'
+    },
+    {
+      id: 'automation-consultant',
+      title: 'Automation Consultant',
+      description: 'Advises clients on integrating smart solutions for homes or offices.',
+      icon: <Target className="w-8 h-8 text-indigo-500" />,
+      skills: ['Consulting', 'System Design', 'Client Management', 'Smart Technologies'],
+      salary: '₦5-9M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
+      courseName: 'Smart-home Automation'
+    },
+    // Cybersecurity
+    {
+      id: 'cybersecurity-analyst',
+      title: 'Cybersecurity Analyst',
+      description: 'Protects systems from threats by identifying vulnerabilities.',
+      icon: <Shield className="w-8 h-8 text-red-500" />,
+      skills: ['Network Security', 'Threat Analysis', 'Firewalls', 'Risk Assessment'],
+      salary: '₦5-10M/year',
+      duration: '6-8 months',
+      courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
+      courseName: 'Cybersecurity'
+    },
+    {
+      id: 'penetration-tester',
+      title: 'Penetration Tester',
+      description: 'Simulates cyberattacks to test system security.',
+      icon: <Shield className="w-8 h-8 text-orange-500" />,
+      skills: ['Ethical Hacking', 'Security Testing', 'Vulnerability Assessment', 'Reporting'],
+      salary: '₦6-12M/year',
+      duration: '6-10 months',
+      courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
+      courseName: 'Cybersecurity'
+    },
+    {
+      id: 'security-consultant',
+      title: 'Security Consultant',
+      description: 'Advises organizations on security strategies and compliance.',
+      icon: <Shield className="w-8 h-8 text-gray-500" />,
+      skills: ['Security Strategy', 'Compliance', 'Risk Management', 'Policy Development'],
+      salary: '₦7-15M/year',
+      duration: '6-8 months',
+      courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
+      courseName: 'Cybersecurity'
+    },
+    // Graphic Design
+    {
+      id: 'graphic-designer',
+      title: 'Graphic Designer',
+      description: 'Creates visuals like logos and marketing materials using Adobe Photoshop or Illustrator.',
+      icon: <Palette className="w-8 h-8 text-pink-500" />,
+      skills: ['Photoshop', 'Illustrator', 'Brand Design', 'Typography'],
+      salary: '₦2-5M/year',
+      duration: '3-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
+      courseName: 'Graphic Design'
+    },
+    {
+      id: 'brand-identity-designer',
+      title: 'Brand Identity Designer',
+      description: 'Develops cohesive visual branding for companies.',
+      icon: <Palette className="w-8 h-8 text-blue-600" />,
+      skills: ['Brand Strategy', 'Logo Design', 'Style Guides', 'Creative Direction'],
+      salary: '₦3-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
+      courseName: 'Graphic Design'
+    },
+    {
+      id: 'social-media-content-creator',
+      title: 'Social Media Content Creator',
+      description: 'Designs graphics for social media campaigns.',
+      icon: <MessageSquare className="w-8 h-8 text-green-600" />,
+      skills: ['Social Media Design', 'Content Creation', 'Brand Consistency', 'Trend Analysis'],
+      salary: '₦2-4M/year',
+      duration: '2-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
+      courseName: 'Graphic Design'
+    },
+    // UI/UX Design
+    {
+      id: 'ui-designer',
+      title: 'UI Designer',
+      description: 'Designs visually appealing app or website interfaces using Figma or Adobe XD.',
+      icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
+      skills: ['Figma', 'Adobe XD', 'Interface Design', 'Visual Design'],
+      salary: '₦4-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
+      courseName: 'UI/UX Design'
+    },
+    {
+      id: 'ux-designer',
+      title: 'UX Designer',
+      description: 'Focuses on user experience, conducting research and creating wireframes.',
+      icon: <Users className="w-8 h-8 text-purple-600" />,
+      skills: ['User Research', 'Wireframing', 'Prototyping', 'User Testing'],
+      salary: '₦4-8M/year',
+      duration: '5-7 months',
+      courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
+      courseName: 'UI/UX Design'
+    },
+    {
+      id: 'product-designer',
+      title: 'Product Designer',
+      description: 'Combines UI/UX to design end-to-end digital products.',
+      icon: <Target className="w-8 h-8 text-blue-700" />,
+      skills: ['Product Strategy', 'User Research', 'Interface Design', 'Prototyping'],
+      salary: '₦5-10M/year',
+      duration: '6-8 months',
+      courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
+      courseName: 'UI/UX Design'
+    },
+    // Mobile App Development
+    {
+      id: 'mobile-app-developer',
+      title: 'Mobile App Developer',
+      description: 'Builds apps for iOS or Android using Swift or Kotlin.',
+      icon: <Smartphone className="w-8 h-8 text-blue-600" />,
+      skills: ['Swift', 'Kotlin', 'React Native', 'Mobile UI'],
+      salary: '₦5-9M/year',
+      duration: '6-10 months',
+      courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
+      courseName: 'Mobile App Development'
+    },
+    {
+      id: 'app-tester',
+      title: 'App Tester',
+      description: 'Tests mobile apps for functionality and user experience.',
+      icon: <Shield className="w-8 h-8 text-green-700" />,
+      skills: ['Testing Methodologies', 'Bug Reporting', 'User Experience', 'Quality Assurance'],
+      salary: '₦2-4M/year',
+      duration: '2-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
+      courseName: 'Mobile App Development'
+    },
+    {
+      id: 'app-ui-ux-designer',
+      title: 'App UI/UX Designer',
+      description: 'Designs intuitive interfaces for mobile apps.',
+      icon: <Palette className="w-8 h-8 text-red-600" />,
+      skills: ['Mobile Design', 'User Interface', 'App Prototyping', 'User Experience'],
+      salary: '₦4-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
+      courseName: 'Mobile App Development'
+    },
+    // Digital Marketing
+    {
+      id: 'digital-marketing-specialist',
+      title: 'Digital Marketing Specialist',
+      description: 'Runs online campaigns using SEO, social media, or Google Ads.',
+      icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
+      skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
+      salary: '₦3-6M/year',
+      duration: '3-5 months',
+      courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
+      courseName: 'Digital Marketing'
+    },
+    {
+      id: 'social-media-manager',
+      title: 'Social Media Manager',
+      description: 'Manages brand presence on platforms like Instagram or X.',
+      icon: <MessageSquare className="w-8 h-8 text-pink-600" />,
+      skills: ['Social Media Strategy', 'Content Planning', 'Community Management', 'Analytics'],
+      salary: '₦2-5M/year',
+      duration: '2-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
+      courseName: 'Digital Marketing'
+    },
+    {
+      id: 'content-marketer',
+      title: 'Content Marketer',
+      description: 'Creates engaging content like blogs or videos to drive traffic.',
+      icon: <Video className="w-8 h-8 text-teal-600" />,
+      skills: ['Content Creation', 'SEO Writing', 'Content Strategy', 'Brand Voice'],
+      salary: '₦3-6M/year',
+      duration: '3-5 months',
+      courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
+      courseName: 'Digital Marketing'
+    },
+    // Video Editing
+    {
+      id: 'video-editor',
+      title: 'Video Editor',
+      description: 'Edits videos for ads, social media, or films using Adobe Premiere or Final Cut Pro.',
+      icon: <Video className="w-8 h-8 text-red-600" />,
+      skills: ['Adobe Premiere', 'Final Cut Pro', 'Motion Graphics', 'Color Grading'],
+      salary: '₦2-5M/year',
+      duration: '3-5 months',
+      courseLink: 'https://www.palmtechniq.com/courses/video-editing',
+      courseName: 'Video Editing'
+    },
+    {
+      id: 'motion-graphics-designer',
+      title: 'Motion Graphics Designer',
+      description: 'Creates animated visuals for videos or ads.',
+      icon: <Video className="w-8 h-8 text-purple-700" />,
+      skills: ['After Effects', 'Motion Design', 'Animation', 'Visual Effects'],
+      salary: '₦3-7M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/video-editing',
+      courseName: 'Video Editing'
+    },
+    {
+      id: 'content-creator',
+      title: 'Content Creator',
+      description: 'Produces and edits video content for YouTube or TikTok.',
+      icon: <Video className="w-8 h-8 text-green-800" />,
+      skills: ['Video Production', 'Content Strategy', 'Social Media', 'Storytelling'],
+      salary: '₦2-6M/year',
+      duration: '2-4 months',
+      courseLink: 'https://www.palmtechniq.com/courses/video-editing',
+      courseName: 'Video Editing'
+    },
+    // Project Management
+    {
+      id: 'project-manager',
+      title: 'Project Manager',
+      description: 'Oversees tech projects, coordinating teams and timelines.',
+      icon: <Users className="w-8 h-8 text-green-600" />,
+      skills: ['Project Planning', 'Team Leadership', 'Agile', 'Communication'],
+      salary: '₦5-10M/year',
+      duration: '4-6 months',
+      courseLink: 'https://www.palmtechniq.com/courses/project-management',
+      courseName: 'Project Management'
+    },
+    {
+      id: 'product-manager',
+      title: 'Product Manager',
+      description: 'Guides product development from ideation to launch.',
+      icon: <Target className="w-8 h-8 text-indigo-700" />,
+      skills: ['Product Strategy', 'Market Research', 'Roadmap Planning', 'Stakeholder Management'],
+      salary: '₦6-12M/year',
+      duration: '5-8 months',
+      courseLink: 'https://www.palmtechniq.com/courses/project-management',
+      courseName: 'Project Management'
+    },
+    {
+      id: 'scrum-master',
+      title: 'Scrum Master',
+      description: 'Facilitates agile development processes and removes team blockers.',
+      icon: <Users className="w-8 h-8 text-orange-700" />,
+      skills: ['Scrum Framework', 'Agile Coaching', 'Team Facilitation', 'Process Improvement'],
+      salary: '₦4-8M/year',
+      duration: '3-5 months',
+      courseLink: 'https://www.palmtechniq.com/courses/project-management',
+      courseName: 'Project Management'
+    }
+  ];
 
   const questions = [
     {
@@ -201,211 +532,12 @@ const Index = () => {
     }
   ];
 
-  const getCareerRecommendations = (data: FormData): CareerRecommendation[] => {
-    const recommendations: CareerRecommendation[] = [];
-
-    // Data Analytics paths
-    if ((data.skills === 'Numbers/math' || data.activities === 'Solving technical problems') && 
-        data.strength === 'Spotting details') {
-      recommendations.push({
-        title: 'Data Analyst',
-        description: 'Analyzes datasets to uncover trends and insights, using tools like Excel, Tableau, or Python.',
-        icon: <BarChart3 className="w-8 h-8 text-blue-500" />,
-        skills: ['Excel', 'Python', 'Tableau', 'Statistics'],
-        salary: '₦3-6M/year',
-        courseLink: courseMapping['Data Analytics'],
-        courseName: 'Data Analytics'
-      });
-    }
-
-    // Web Development paths
-    if ((data.project === 'Technical projects (coding, cybersecurity)' || data.workFocus === 'Technical systems') && 
-        data.preference === 'Work well') {
-      recommendations.push({
-        title: 'Back-End Developer',
-        description: 'Manages server-side logic and databases using Python or Node.js.',
-        icon: <Code className="w-8 h-8 text-green-500" />,
-        skills: ['Python', 'Node.js', 'Databases', 'APIs'],
-        salary: '₦4-8M/year',
-        courseLink: courseMapping['Web Development'],
-        courseName: 'Web Development'
-      });
-    }
-
-    if ((data.workFocus === 'Creative designs' || data.preference === 'Look good') && 
-        data.activities === 'Creating visuals') {
-      recommendations.push({
-        title: 'Front-End Developer',
-        description: 'Builds user-facing website elements using HTML, CSS, and JavaScript.',
-        icon: <Palette className="w-8 h-8 text-purple-500" />,
-        skills: ['HTML', 'CSS', 'JavaScript', 'React'],
-        salary: '₦4-8M/year',
-        courseLink: courseMapping['Web Development'],
-        courseName: 'Web Development'
-      });
-    }
-
-    // Cybersecurity paths
-    if (data.project === 'Technical projects (coding, cybersecurity)' && 
-        data.strength === 'Fixing problems') {
-      recommendations.push({
-        title: 'Cybersecurity Analyst',
-        description: 'Protects systems from threats by identifying vulnerabilities.',
-        icon: <Shield className="w-8 h-8 text-red-500" />,
-        skills: ['Network Security', 'Threat Analysis', 'Firewalls'],
-        salary: '₦5-10M/year',
-        courseLink: courseMapping['Cybersecurity'],
-        courseName: 'Cybersecurity'
-      });
-    }
-
-    // Graphic Design paths
-    if ((data.activities === 'Creating visuals' || data.skills === 'Design/creativity') && 
-        data.workFocus === 'Creative designs') {
-      recommendations.push({
-        title: 'Graphic Designer',
-        description: 'Creates visuals like logos and marketing materials using Adobe Photoshop or Illustrator.',
-        icon: <Palette className="w-8 h-8 text-pink-500" />,
-        skills: ['Photoshop', 'Illustrator', 'Brand Design', 'Typography'],
-        salary: '₦2-5M/year',
-        courseLink: courseMapping['Graphic Design'],
-        courseName: 'Graphic Design'
-      });
-    }
-
-    // UI/UX Design paths
-    if (data.workFocus === 'Creative designs' && data.preference === 'Both') {
-      recommendations.push({
-        title: 'UI/UX Designer',
-        description: 'Designs visually appealing and user-friendly app or website interfaces.',
-        icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
-        skills: ['Figma', 'User Research', 'Wireframing', 'Prototyping'],
-        salary: '₦4-7M/year',
-        courseLink: courseMapping['UI/UX Design'],
-        courseName: 'UI/UX Design'
-      });
-    }
-
-    // Mobile App Development paths
-    if (data.project === 'Technical projects (coding, cybersecurity)' && 
-        data.device === 'Smartphone') {
-      recommendations.push({
-        title: 'Mobile App Developer',
-        description: 'Builds apps for iOS or Android using Swift or Kotlin.',
-        icon: <Smartphone className="w-8 h-8 text-blue-600" />,
-        skills: ['Swift', 'Kotlin', 'React Native', 'Mobile UI'],
-        salary: '₦5-9M/year',
-        courseLink: courseMapping['Mobile App Development'],
-        courseName: 'Mobile App Development'
-      });
-    }
-
-    // Digital Marketing paths
-    if ((data.activities === 'Promoting or marketing' || data.skills === 'Marketing') && 
-        data.workFocus === 'Managing processes') {
-      recommendations.push({
-        title: 'Digital Marketing Specialist',
-        description: 'Runs online campaigns using SEO, social media, or Google Ads.',
-        icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
-        skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
-        salary: '₦3-6M/year',
-        courseLink: courseMapping['Digital Marketing'],
-        courseName: 'Digital Marketing'
-      });
-    }
-
-    // Video Editing paths
-    if ((data.activities === 'Editing videos' || data.skills === 'Video editing') && 
-        data.workFocus === 'Creative designs') {
-      recommendations.push({
-        title: 'Video Editor',
-        description: 'Edits videos for ads, social media, or films using Adobe Premiere or Final Cut Pro.',
-        icon: <Video className="w-8 h-8 text-red-600" />,
-        skills: ['Adobe Premiere', 'Final Cut Pro', 'Motion Graphics', 'Color Grading'],
-        salary: '₦2-5M/year',
-        courseLink: courseMapping['Video Editing'],
-        courseName: 'Video Editing'
-      });
-    }
-
-    // Project Management paths
-    if ((data.skills === 'Planning' || data.strength === 'Leading teams') && 
-        data.workStyle === 'Variety') {
-      recommendations.push({
-        title: 'Project Manager',
-        description: 'Oversees tech projects, coordinating teams and timelines.',
-        icon: <Users className="w-8 h-8 text-green-600" />,
-        skills: ['Project Planning', 'Team Leadership', 'Agile', 'Communication'],
-        salary: '₦5-10M/year',
-        courseLink: courseMapping['Project Management'],
-        courseName: 'Project Management'
-      });
-    }
-
-    // Smart-home Automation paths
-    if (data.activities === 'Building physical devices' || data.project === 'Smart devices or IoT') {
-      recommendations.push({
-        title: 'IoT Developer',
-        description: 'Designs and programs smart devices like home security systems using IoT platforms.',
-        icon: <Home className="w-8 h-8 text-teal-500" />,
-        skills: ['IoT Platforms', 'Arduino', 'Raspberry Pi', 'Sensors'],
-        salary: '₦4-7M/year',
-        courseLink: courseMapping['Smart-home Automation'],
-        courseName: 'Smart-home Automation'
-      });
-    }
-
-    // Ensure at least 2 recommendations
-    if (recommendations.length < 2) {
-      if (recommendations.length === 0) {
-        recommendations.push(
-          {
-            title: 'Full-Stack Developer',
-            description: 'Handles both front-end and back-end, creating complete web apps.',
-            icon: <Code className="w-8 h-8 text-blue-500" />,
-            skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
-            salary: '₦6-12M/year',
-            courseLink: courseMapping['Web Development'],
-            courseName: 'Web Development'
-          },
-          {
-            title: 'Digital Marketing Specialist',
-            description: 'Runs online campaigns using SEO, social media, or Google Ads.',
-            icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
-            skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
-            salary: '₦3-6M/year',
-            courseLink: courseMapping['Digital Marketing'],
-            courseName: 'Digital Marketing'
-          }
-        );
-      } else {
-        recommendations.push({
-          title: 'UI/UX Designer',
-          description: 'Designs visually appealing and user-friendly app or website interfaces.',
-          icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
-          skills: ['Figma', 'User Research', 'Wireframing', 'Prototyping'],
-          salary: '₦4-7M/year',
-          courseLink: courseMapping['UI/UX Design'],
-          courseName: 'UI/UX Design'
-        });
-      }
-    }
-
-    return recommendations.slice(0, 3);
-  };
-
-  const submitFormData = async (data: FormData, recommendations: CareerRecommendation[]) => {
+  const submitFormData = async (data: FormData) => {
     setIsSubmitting(true);
     try {
       const payload = {
         userId: data.whatsappNumber,
         formData: data,
-        recommendations: recommendations.map(rec => ({
-          title: rec.title,
-          description: rec.description,
-          skills: rec.skills,
-          salary: rec.salary
-        })),
         submittedAt: new Date().toISOString()
       };
 
@@ -437,13 +569,21 @@ const Index = () => {
             
             try {
               const jsonResponse = JSON.parse(result);
-              if (jsonResponse.recommendation) {
-                setAiResponse(jsonResponse.recommendation);
-              } else {
-                setAiResponse(result);
+              
+              // Extract recommendation text
+              if (jsonResponse.Recommendation) {
+                setAiResponse(jsonResponse.Recommendation);
               }
+              
+              // Extract careers array
+              if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
+                setVisibleCareers(jsonResponse.Careers);
+              }
+              
             } catch (parseError) {
+              // Fallback if not JSON
               setAiResponse(result);
+              console.error('Failed to parse JSON response:', parseError);
             }
             break;
           }
@@ -493,11 +633,7 @@ const Index = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      const recs = getCareerRecommendations(formData);
-      setRecommendations(recs);
-      
-      await submitFormData(formData, recs);
-      
+      await submitFormData(formData);
       setShowResults(true);
       toast({
         title: "Analysis Complete!",
@@ -538,9 +674,14 @@ const Index = () => {
     });
     setCurrentStep(0);
     setShowResults(false);
-    setRecommendations([]);
     setAiResponse('');
+    setVisibleCareers([]);
   };
+
+  // Filter visible careers based on API response
+  const displayedCareers = allCareers.filter(career => 
+    visibleCareers.includes(career.id) || visibleCareers.includes(career.title)
+  );
 
   if (showResults) {
     return (
@@ -591,21 +732,21 @@ const Index = () => {
               <div className="lg:col-span-1">
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Career Paths</h2>
-                  {recommendations.map((rec, index) => (
-                    <Card key={index} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  {displayedCareers.map((career) => (
+                    <Card key={career.id} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           <div className="p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md flex-shrink-0">
-                            {rec.icon}
+                            {career.icon}
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-800 mb-2">{rec.title}</h3>
-                            <p className="text-gray-600 text-sm mb-3">{rec.description}</p>
+                            <h3 className="text-lg font-bold text-blue-800 mb-2">{career.title}</h3>
+                            <p className="text-gray-600 text-sm mb-3">{career.description}</p>
                             
                             <div className="mb-3">
                               <h4 className="font-semibold text-gray-700 text-sm mb-2">Key Skills:</h4>
                               <div className="flex flex-wrap gap-1">
-                                {rec.skills.map((skill, skillIndex) => (
+                                {career.skills.map((skill, skillIndex) => (
                                   <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                                     {skill}
                                   </span>
@@ -613,17 +754,23 @@ const Index = () => {
                               </div>
                             </div>
                             
-                            <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-200">
-                              <span className="text-xs text-gray-600">Average salary:</span>
-                              <span className="font-semibold text-green-600 text-sm">{rec.salary}</span>
+                            <div className="grid grid-cols-2 gap-2 mb-3 pt-2 border-t border-gray-200">
+                              <div className="text-xs">
+                                <span className="text-gray-600">Salary:</span>
+                                <div className="font-semibold text-green-600">{career.salary}</div>
+                              </div>
+                              <div className="text-xs">
+                                <span className="text-gray-600">Duration:</span>
+                                <div className="font-semibold text-blue-600">{career.duration}</div>
+                              </div>
                             </div>
                             
                             <Button 
                               asChild
                               className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold text-sm py-2"
                             >
-                              <a href={rec.courseLink} target="_blank" rel="noopener noreferrer">
-                                Enroll in {rec.courseName}
+                              <a href={career.courseLink} target="_blank" rel="noopener noreferrer">
+                                Enroll in {career.courseName}
                               </a>
                             </Button>
                           </div>
