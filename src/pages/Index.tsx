@@ -572,75 +572,84 @@ const Index = () => {
             console.log(`Webhook ${i + 1} RAW response:`, result);
             console.log(`Webhook ${i + 1} response type:`, typeof result);
             
-            // Parse the structured text response
-            if (result.includes('Recommendation:') && result.includes('careers')) {
-              const lines = result.split('\n');
-              let recommendation = '';
-              let careers: string[] = [];
-              let isReadingRecommendation = false;
-              let isReadingCareers = false;
-              
-              for (let line of lines) {
-                line = line.trim();
-                
-                if (line.startsWith('Recommendation:')) {
-                  isReadingRecommendation = true;
-                  isReadingCareers = false;
-                  recommendation = line.replace('Recommendation:', '').trim();
-                } else if (line.toLowerCase() === 'careers') {
-                  isReadingRecommendation = false;
-                  isReadingCareers = true;
-                } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
-                  recommendation += line;
-                } else if (isReadingCareers && line) {
-                  // Parse career lines like "0:Cybersecurity Analyst"
-                  if (line.includes(':')) {
-                    const careerName = line.split(':').slice(1).join(':').trim();
-                    if (careerName) {
-                      careers.push(careerName);
-                    }
-                  }
-                }
-              }
-              
-              console.log('Parsed recommendation:', recommendation);
-              console.log('Parsed careers:', careers);
-              
-              if (recommendation) {
-                setAiResponse(recommendation);
-              }
-              if (careers.length > 0) {
-                setVisibleCareers(careers);
-              }
-              responseFound = true;
-              break;
-            } else {
-            // Try JSON parsing as fallback
+            // Try JSON parsing first
             try {
               const jsonResponse = JSON.parse(result);
               console.log('Parsed JSON response:', jsonResponse);
               
               // Handle array format: [{"output": {"Recommendation": "...", "careers": ["..."]}}]
               let dataToProcess = jsonResponse;
-              if (Array.isArray(jsonResponse) && jsonResponse.length > 0 && jsonResponse[0].output) {
+              if (Array.isArray(jsonResponse) && jsonResponse.length > 0 && jsonResponse[0]?.output) {
                 dataToProcess = jsonResponse[0].output;
+                console.log('Extracted output data:', dataToProcess);
               }
               
               if (dataToProcess.Recommendation) {
+                console.log('Setting AI response:', dataToProcess.Recommendation);
                 setAiResponse(dataToProcess.Recommendation);
+                responseFound = true;
               }
               if (dataToProcess.careers && Array.isArray(dataToProcess.careers)) {
+                console.log('Setting visible careers:', dataToProcess.careers);
                 setVisibleCareers(dataToProcess.careers);
+                responseFound = true;
               }
               // Also check for uppercase Careers
               if (dataToProcess.Careers && Array.isArray(dataToProcess.Careers)) {
+                console.log('Setting visible careers (uppercase):', dataToProcess.Careers);
                 setVisibleCareers(dataToProcess.Careers);
+                responseFound = true;
               }
-              responseFound = true;
-              break;
+              
+              if (responseFound) {
+                break;
+              }
             } catch (parseError) {
-              console.error('Failed to parse response:', parseError);
-            }
+              console.error('JSON parsing failed:', parseError);
+              
+              // Fallback to structured text parsing
+              if (result.includes('Recommendation:') && result.includes('careers')) {
+                const lines = result.split('\n');
+                let recommendation = '';
+                let careers: string[] = [];
+                let isReadingRecommendation = false;
+                let isReadingCareers = false;
+                
+                for (let line of lines) {
+                  line = line.trim();
+                  
+                  if (line.startsWith('Recommendation:')) {
+                    isReadingRecommendation = true;
+                    isReadingCareers = false;
+                    recommendation = line.replace('Recommendation:', '').trim();
+                  } else if (line.toLowerCase() === 'careers') {
+                    isReadingRecommendation = false;
+                    isReadingCareers = true;
+                  } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
+                    recommendation += line;
+                  } else if (isReadingCareers && line) {
+                    // Parse career lines like "0:Cybersecurity Analyst"
+                    if (line.includes(':')) {
+                      const careerName = line.split(':').slice(1).join(':').trim();
+                      if (careerName) {
+                        careers.push(careerName);
+                      }
+                    }
+                  }
+                }
+                
+                console.log('Structured text - Parsed recommendation:', recommendation);
+                console.log('Structured text - Parsed careers:', careers);
+                
+                if (recommendation) {
+                  setAiResponse(recommendation);
+                }
+                if (careers.length > 0) {
+                  setVisibleCareers(careers);
+                }
+                responseFound = true;
+                break;
+              }
             }
           }
         }
