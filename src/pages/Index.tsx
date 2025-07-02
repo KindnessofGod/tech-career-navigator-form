@@ -566,9 +566,11 @@ const Index = () => {
       for (let i = 0; i < responses.length; i++) {
         if (responses[i].status === 'fulfilled') {
           const response = (responses[i] as PromiseFulfilledResult<Response>).value;
+          console.log(`Webhook ${i + 1} status:`, response.status);
           if (response.ok) {
             const result = await response.text();
-            console.log(`Webhook ${i + 1} response:`, result);
+            console.log(`Webhook ${i + 1} RAW response:`, result);
+            console.log(`Webhook ${i + 1} response type:`, typeof result);
             
             // Parse the structured text response
             if (result.includes('Recommendation:') && result.includes('careers')) {
