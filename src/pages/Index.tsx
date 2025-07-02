@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageSquare, Smartphone, Home, Target, Video, TrendingUp, Zap } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import sanitizeHtml from 'sanitize-html';
 
 interface FormData {
   name: string;
@@ -532,150 +534,66 @@ const Index = () => {
     }
   ];
 
+  const parseWebhookResponse = async (response: Response) => {
+    try {
+      const result = await response.json();
+      console.log('Raw JSON response:', JSON.stringify(result, null, 2));
+      
+      if (Array.isArray(result) && result.length > 0 && result[0]?.output) {
+        const { Recommendation, careers } = result[0].output;
+        if (!Recommendation || !Array.isArray(careers) || careers.length === 0) {
+          throw new Error('Invalid response structure: Missing or invalid Recommendation or careers');
+        }
+        console.log('Parsed data:', { Recommendation, careers });
+        return { recommendation: Recommendation, careers };
+      }
+      throw new Error('Unexpected JSON structure');
+    } catch (error) {
+      console.error('Error parsing webhook response:', error);
+      throw error;
+    }
+  };
+
   const submitFormData = async (data: FormData) => {
     setIsSubmitting(true);
     try {
       const payload = {
         userId: data.whatsappNumber,
         formData: data,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
+      console.log('Submitting payload:', JSON.stringify(payload, null, 2));
 
-      console.log('Submitting form data:', payload);
+      const webhookUrl = 'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0';
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-      // Submit to both webhooks
-      const webhookUrls = [
-        'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0'
-        // Removed webhook-test as it returns empty responses
-      ];
-
-      const submissions = webhookUrls.map(url => 
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload)
-        })
-      );
-
-      const responses = await Promise.allSettled(submissions);
+      console.log('Webhook response status:', response.status);
       
-      // Use the first successful response for AI response
-      let responseFound = false;
-      for (let i = 0; i < responses.length; i++) {
-        if (responses[i].status === 'fulfilled') {
-          const response = (responses[i] as PromiseFulfilledResult<Response>).value;
-          console.log(`Webhook ${i + 1} status:`, response.status);
-          if (response.ok) {
-            const result = await response.text();
-            console.log(`Webhook ${i + 1} RAW response:`, result);
-            console.log(`Webhook ${i + 1} response type:`, typeof result);
-            
-            // Try JSON parsing first
-            try {
-              const jsonResponse = JSON.parse(result);
-              console.log('Parsed JSON response:', jsonResponse);
-              
-              // Handle array format: [{"output": {"Recommendation": "...", "careers": ["..."]}}]
-              let dataToProcess = jsonResponse;
-              if (Array.isArray(jsonResponse) && jsonResponse.length > 0 && jsonResponse[0]?.output) {
-                dataToProcess = jsonResponse[0].output;
-                console.log('Extracted output data:', dataToProcess);
-              }
-              
-              if (dataToProcess.Recommendation) {
-                console.log('Setting AI response:', dataToProcess.Recommendation);
-                setAiResponse(dataToProcess.Recommendation);
-                responseFound = true;
-              }
-              if (dataToProcess.careers && Array.isArray(dataToProcess.careers)) {
-                console.log('Setting visible careers:', dataToProcess.careers);
-                setVisibleCareers(dataToProcess.careers);
-                responseFound = true;
-              }
-              // Also check for uppercase Careers
-              if (dataToProcess.Careers && Array.isArray(dataToProcess.Careers)) {
-                console.log('Setting visible careers (uppercase):', dataToProcess.Careers);
-                setVisibleCareers(dataToProcess.Careers);
-                responseFound = true;
-              }
-              
-              if (responseFound) {
-                break;
-              }
-            } catch (parseError) {
-              console.error('JSON parsing failed:', parseError);
-              
-              // Fallback to structured text parsing
-              if (result.includes('Recommendation:') && result.includes('careers')) {
-                const lines = result.split('\n');
-                let recommendation = '';
-                let careers: string[] = [];
-                let isReadingRecommendation = false;
-                let isReadingCareers = false;
-                
-                for (let line of lines) {
-                  line = line.trim();
-                  
-                  if (line.startsWith('Recommendation:')) {
-                    isReadingRecommendation = true;
-                    isReadingCareers = false;
-                    recommendation = line.replace('Recommendation:', '').trim();
-                  } else if (line.toLowerCase() === 'careers') {
-                    isReadingRecommendation = false;
-                    isReadingCareers = true;
-                  } else if (isReadingRecommendation && line && !line.toLowerCase().includes('career')) {
-                    recommendation += line;
-                  } else if (isReadingCareers && line) {
-                    // Parse career lines like "0:Cybersecurity Analyst"
-                    if (line.includes(':')) {
-                      const careerName = line.split(':').slice(1).join(':').trim();
-                      if (careerName) {
-                        careers.push(careerName);
-                      }
-                    }
-                  }
-                }
-                
-                console.log('Structured text - Parsed recommendation:', recommendation);
-                console.log('Structured text - Parsed careers:', careers);
-                
-                if (recommendation) {
-                  setAiResponse(recommendation);
-                }
-                if (careers.length > 0) {
-                  setVisibleCareers(careers);
-                }
-                responseFound = true;
-                break;
-              }
-            }
-          }
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
-      if (!responseFound) {
-        console.log('No successful response, using fallback data');
-        setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-        const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
-        setVisibleCareers(fallbackCareers);
-      }
+      const { recommendation, careers } = await parseWebhookResponse(response);
+      console.log('Setting state:', { recommendation, careers });
+      setAiResponse(recommendation);
+      setVisibleCareers(careers);
 
-      console.log('Form data submitted successfully');
       toast({
-        title: "Form Submitted!",
-        description: "Your career assessment has been submitted successfully.",
+        title: 'Form Submitted!',
+        description: 'Your career assessment has been submitted successfully.',
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      setAiResponse("Thank you for completing the assessment! Based on your responses, we've generated personalized career recommendations for you.");
-      const fallbackCareers = ['Cybersecurity Analyst', 'Project Manager'];
-      setVisibleCareers(fallbackCareers);
+      setAiResponse('Thank you for completing the assessment! Based on your responses, we have generated personalized career recommendations for you.');
+      setVisibleCareers(['Smart Home Technician', 'Automation Consultant', 'Project Manager']);
       toast({
-        title: "Submission Error",
-        description: "There was an error submitting your form. Please try again.",
-        variant: "destructive"
+        title: 'Submission Error',
+        description: 'There was an error submitting your form. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
@@ -752,15 +670,16 @@ const Index = () => {
     setVisibleCareers([]);
   };
 
-  // Filter visible careers based on API response - match by title exactly
-  const displayedCareers = allCareers.filter(career => {
-    console.log('Checking career:', career.title, 'against visible careers:', visibleCareers);
-    return visibleCareers.some(visibleCareer => 
-      visibleCareer.trim().toLowerCase() === career.title.trim().toLowerCase()
-    );
-  });
+  const normalizeString = (str: string) => str.trim().toLowerCase().replace(/\s+/g, ' ');
 
-  console.log('Displayed careers:', displayedCareers);
+  const displayedCareers = useMemo(() => {
+    console.log('Visible careers:', visibleCareers);
+    const result = allCareers.filter(career =>
+      visibleCareers.some(visibleCareer => normalizeString(visibleCareer) === normalizeString(career.title))
+    );
+    console.log('Displayed careers:', result.map(c => c.title));
+    return result;
+  }, [visibleCareers]);
 
   if (showResults) {
     return (
@@ -798,13 +717,25 @@ const Index = () => {
                   </CardHeader>
                   <CardContent>
                     {aiResponse ? (
-                      <div 
+                      <div
                         className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: aiResponse }}
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(aiResponse, {
+                            allowedTags: ['h1', 'h2', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'li', 'em', 'strong'],
+                            allowedAttributes: {
+                              h1: ['style'],
+                              h2: ['style'],
+                              span: ['style'],
+                              a: ['href', 'target'],
+                            },
+                          }),
+                        }}
                       />
                     ) : (
-                      <div className="text-gray-600">
-                        <p>Analyzing your responses...</p>
+                      <div className="space-y-4">
+                        <Skeleton className="h-6 w-3/4 bg-gray-200/50" />
+                        <Skeleton className="h-4 w-full bg-gray-200/50" />
+                        <Skeleton className="h-4 w-5/6 bg-gray-200/50" />
                       </div>
                     )}
                   </CardContent>
@@ -863,8 +794,10 @@ const Index = () => {
                       </Card>
                     ))
                   ) : (
-                    <div className="text-center text-gray-600">
-                      <p>Loading your personalized career recommendations...</p>
+                    <div className="space-y-6">
+                      {[1, 2, 3].map((_, index) => (
+                        <Skeleton key={index} className="h-48 w-full bg-gray-200/50 rounded-lg" />
+                      ))}
                     </div>
                   )}
                 </div>
