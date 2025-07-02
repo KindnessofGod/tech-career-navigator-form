@@ -613,22 +613,32 @@ const Index = () => {
               responseFound = true;
               break;
             } else {
-              // Try JSON parsing as fallback
-              try {
-                const jsonResponse = JSON.parse(result);
-                console.log('Parsed JSON response:', jsonResponse);
-                
-                if (jsonResponse.Recommendation) {
-                  setAiResponse(jsonResponse.Recommendation);
-                }
-                if (jsonResponse.Careers && Array.isArray(jsonResponse.Careers)) {
-                  setVisibleCareers(jsonResponse.Careers);
-                }
-                responseFound = true;
-                break;
-              } catch (parseError) {
-                console.error('Failed to parse response:', parseError);
+            // Try JSON parsing as fallback
+            try {
+              const jsonResponse = JSON.parse(result);
+              console.log('Parsed JSON response:', jsonResponse);
+              
+              // Handle array format: [{"output": {"Recommendation": "...", "careers": ["..."]}}]
+              let dataToProcess = jsonResponse;
+              if (Array.isArray(jsonResponse) && jsonResponse.length > 0 && jsonResponse[0].output) {
+                dataToProcess = jsonResponse[0].output;
               }
+              
+              if (dataToProcess.Recommendation) {
+                setAiResponse(dataToProcess.Recommendation);
+              }
+              if (dataToProcess.careers && Array.isArray(dataToProcess.careers)) {
+                setVisibleCareers(dataToProcess.careers);
+              }
+              // Also check for uppercase Careers
+              if (dataToProcess.Careers && Array.isArray(dataToProcess.Careers)) {
+                setVisibleCareers(dataToProcess.Careers);
+              }
+              responseFound = true;
+              break;
+            } catch (parseError) {
+              console.error('Failed to parse response:', parseError);
+            }
             }
           }
         }
