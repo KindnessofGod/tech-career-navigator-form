@@ -589,7 +589,7 @@ const Index = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setAiResponse('Thank you for completing the assessment! Based on your responses, we have generated personalized career recommendations for you.');
-      setVisibleCareers(['Smart Home Technician', 'Automation Consultant', 'Project Manager']);
+      setVisibleCareers(['Project Manager', 'Digital Marketing Specialist']);
       toast({
         title: 'Submission Error',
         description: 'There was an error submitting your form. Please try again.',
