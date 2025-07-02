@@ -545,8 +545,8 @@ const Index = () => {
 
       // Submit to both webhooks
       const webhookUrls = [
-        'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0',
-        'https://kindness300mjuly.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0'
+        'https://kindness300mjuly.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0'
+        // Removed webhook-test as it returns empty responses
       ];
 
       const submissions = webhookUrls.map(url => 
