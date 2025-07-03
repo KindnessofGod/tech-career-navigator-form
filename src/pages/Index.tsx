@@ -766,13 +766,26 @@ const Index = () => {
                         className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(aiResponse, {
-                            allowedTags: ['h1', 'h2', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'li', 'em', 'strong'],
+                            allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'ol', 'li', 'em', 'strong', 'div', 'pre', 'code', 'blockquote', 'hr'],
                             allowedAttributes: {
-                              h1: ['style'],
-                              h2: ['style'],
-                              span: ['style'],
-                              a: ['href', 'target'],
+                              '*': ['style', 'class'],
+                              a: ['href', 'target', 'rel'],
+                              img: ['src', 'alt', 'width', 'height'],
                             },
+                            allowedSchemes: ['http', 'https', 'mailto'],
+                            allowedStyles: {
+                              '*': {
+                                'color': [/.*/],
+                                'background-color': [/.*/],
+                                'font-size': [/.*/],
+                                'font-weight': [/.*/],
+                                'text-align': [/.*/],
+                                'margin': [/.*/],
+                                'padding': [/.*/],
+                                'border': [/.*/],
+                                'text-decoration': [/.*/],
+                              }
+                            }
                           }),
                         }}
                       />
