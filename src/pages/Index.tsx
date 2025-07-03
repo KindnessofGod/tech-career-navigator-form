@@ -539,15 +539,12 @@ const Index = () => {
       const result = await response.json();
       console.log('Raw JSON response:', JSON.stringify(result, null, 2));
       
-      if (Array.isArray(result) && result.length > 0 && result[0]?.output) {
-        const { Recommendation, careers } = result[0].output;
-        if (!Recommendation || !Array.isArray(careers) || careers.length === 0) {
-          throw new Error('Invalid response structure: Missing or invalid Recommendation or careers');
-        }
-        console.log('Parsed data:', { Recommendation, careers });
-        return { recommendation: Recommendation, careers };
+      if (result.recommendation && Array.isArray(result.careers) && result.careers.length > 0) {
+        const { recommendation, careers } = result;
+        console.log('Parsed data:', { recommendation, careers });
+        return { recommendation, careers };
       }
-      throw new Error('Unexpected JSON structure');
+      throw new Error('Invalid response structure: Missing or invalid recommendation or careers');
     } catch (error) {
       console.error('Error parsing webhook response:', error);
       throw error;
