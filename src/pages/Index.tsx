@@ -600,6 +600,54 @@ const Index = () => {
     }
   };
 
+  const testWebhook = async () => {
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        userId: formData.whatsappNumber || '+2349123456789',
+        formData: formData,
+        submittedAt: new Date().toISOString(),
+      };
+      console.log('Testing webhook with payload:', JSON.stringify(payload, null, 2));
+
+      const testWebhookUrl = 'https://kindness300mjuly.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0';
+      const response = await fetch(testWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      console.log('Test webhook response status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+
+      const { recommendation, careers } = await parseWebhookResponse(response);
+      console.log('Test webhook - Setting state:', { recommendation, careers });
+      setAiResponse(recommendation);
+      setVisibleCareers(careers);
+      setShowResults(true);
+
+      toast({
+        title: 'Test Webhook Success!',
+        description: 'Test webhook called successfully.',
+      });
+    } catch (error) {
+      console.error('Error calling test webhook:', error);
+      setAiResponse('Thank you for completing the assessment! Based on your responses, we have generated personalized career recommendations for you.');
+      setVisibleCareers(['Project Manager', 'Digital Marketing Specialist']);
+      setShowResults(true);
+      toast({
+        title: 'Test Webhook Error',
+        description: 'There was an error calling the test webhook.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleInputChange = (key: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
@@ -837,20 +885,32 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto">
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Progress</span>
-              <span className="text-sm font-medium text-gray-700">{currentStep + 1} of {questions.length}</span>
+          <div className="max-w-2xl mx-auto">
+            {/* Test Button */}
+            <div className="mb-4 text-center">
+              <Button
+                onClick={testWebhook}
+                disabled={isSubmitting}
+                variant="outline"
+                className="bg-red-100 border-red-300 text-red-700 hover:bg-red-200 px-4 py-2 rounded-md font-medium"
+              >
+                🧪 Test Webhook
+              </Button>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${progress}%` }}
-              ></div>
+
+            {/* Progress Bar */}
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium text-gray-700">Progress</span>
+                <span className="text-sm font-medium text-gray-700">{currentStep + 1} of {questions.length}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
             </div>
-          </div>
 
           <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg" onKeyDown={handleKeyPress}>
             <CardHeader>
