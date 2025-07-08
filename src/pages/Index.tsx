@@ -85,7 +85,7 @@ const Index = () => {
       description: 'Analyzes datasets to uncover trends and insights, using tools like Excel, Tableau, or Python.',
       icon: <BarChart3 className="w-8 h-8 text-blue-500" />,
       skills: ['Excel', 'Python', 'Tableau', 'Statistics'],
-      salary: '₦3-6M/year',
+      salary: '',
       duration: '3-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
@@ -96,7 +96,7 @@ const Index = () => {
       description: 'Transforms data into actionable business strategies, creating reports and dashboards.',
       icon: <BarChart3 className="w-8 h-8 text-green-500" />,
       skills: ['SQL', 'Power BI', 'Business Analysis', 'Data Visualization'],
-      salary: '₦4-7M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
@@ -107,7 +107,7 @@ const Index = () => {
       description: 'Studies consumer behavior to inform marketing strategies, using data to predict trends.',
       icon: <TrendingUp className="w-8 h-8 text-purple-500" />,
       skills: ['Market Research', 'Statistics', 'Survey Design', 'Consumer Psychology'],
-      salary: '₦3-5M/year',
+      salary: '',
       duration: '3-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
@@ -119,7 +119,7 @@ const Index = () => {
       description: 'Builds user-facing website elements using HTML, CSS, and JavaScript.',
       icon: <Palette className="w-8 h-8 text-purple-500" />,
       skills: ['HTML', 'CSS', 'JavaScript', 'React'],
-      salary: '₦4-8M/year',
+      salary: '',
       duration: '4-8 months',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
@@ -130,7 +130,7 @@ const Index = () => {
       description: 'Manages server-side logic and databases using Python or Node.js.',
       icon: <Code className="w-8 h-8 text-green-500" />,
       skills: ['Python', 'Node.js', 'Databases', 'APIs'],
-      salary: '₦4-8M/year',
+      salary: '',
       duration: '6-10 months',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
@@ -141,7 +141,7 @@ const Index = () => {
       description: 'Handles both front-end and back-end, creating complete web apps.',
       icon: <Code className="w-8 h-8 text-blue-500" />,
       skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
-      salary: '₦6-12M/year',
+      salary: '',
       duration: '8-12 months',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
@@ -153,7 +153,7 @@ const Index = () => {
       description: 'Designs and programs smart devices like home security systems using IoT platforms.',
       icon: <Home className="w-8 h-8 text-teal-500" />,
       skills: ['IoT Platforms', 'Arduino', 'Raspberry Pi', 'Sensors'],
-      salary: '₦4-7M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
@@ -164,7 +164,7 @@ const Index = () => {
       description: 'Installs and maintains smart devices like thermostats or lighting systems.',
       icon: <Zap className="w-8 h-8 text-yellow-500" />,
       skills: ['Device Installation', 'Network Setup', 'Troubleshooting', 'Customer Service'],
-      salary: '₦2-4M/year',
+      salary: '',
       duration: '2-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
@@ -175,7 +175,7 @@ const Index = () => {
       description: 'Advises clients on integrating smart solutions for homes or offices.',
       icon: <Target className="w-8 h-8 text-indigo-500" />,
       skills: ['Consulting', 'System Design', 'Client Management', 'Smart Technologies'],
-      salary: '₦5-9M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
@@ -187,7 +187,7 @@ const Index = () => {
       description: 'Protects systems from threats by identifying vulnerabilities.',
       icon: <Shield className="w-8 h-8 text-red-500" />,
       skills: ['Network Security', 'Threat Analysis', 'Firewalls', 'Risk Assessment'],
-      salary: '₦5-10M/year',
+      salary: '',
       duration: '6-8 months',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
@@ -198,7 +198,7 @@ const Index = () => {
       description: 'Simulates cyberattacks to test system security.',
       icon: <Shield className="w-8 h-8 text-orange-500" />,
       skills: ['Ethical Hacking', 'Security Testing', 'Vulnerability Assessment', 'Reporting'],
-      salary: '₦6-12M/year',
+      salary: '',
       duration: '6-10 months',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
@@ -209,7 +209,7 @@ const Index = () => {
       description: 'Advises organizations on security strategies and compliance.',
       icon: <Shield className="w-8 h-8 text-gray-500" />,
       skills: ['Security Strategy', 'Compliance', 'Risk Management', 'Policy Development'],
-      salary: '₦7-15M/year',
+      salary: '',
       duration: '6-8 months',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
@@ -221,7 +221,7 @@ const Index = () => {
       description: 'Creates visuals like logos and marketing materials using Adobe Photoshop or Illustrator.',
       icon: <Palette className="w-8 h-8 text-pink-500" />,
       skills: ['Photoshop', 'Illustrator', 'Brand Design', 'Typography'],
-      salary: '₦2-5M/year',
+      salary: '',
       duration: '3-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
@@ -232,7 +232,7 @@ const Index = () => {
       description: 'Develops cohesive visual branding for companies.',
       icon: <Palette className="w-8 h-8 text-blue-600" />,
       skills: ['Brand Strategy', 'Logo Design', 'Style Guides', 'Creative Direction'],
-      salary: '₦3-7M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
@@ -243,31 +243,20 @@ const Index = () => {
       description: 'Designs graphics for social media campaigns.',
       icon: <MessageSquare className="w-8 h-8 text-green-600" />,
       skills: ['Social Media Design', 'Content Creation', 'Brand Consistency', 'Trend Analysis'],
-      salary: '₦2-4M/year',
+      salary: '',
       duration: '2-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
     },
     // UI/UX Design
     {
-      id: 'ui-designer',
-      title: 'UI Designer',
-      description: 'Designs visually appealing app or website interfaces using Figma or Adobe XD.',
+      id: 'ui-ux-designer',
+      title: 'UI/UX Designer',
+      description: 'Designs visually appealing interfaces and focuses on user experience, combining visual design with user research and prototyping.',
       icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
-      skills: ['Figma', 'Adobe XD', 'Interface Design', 'Visual Design'],
-      salary: '₦4-7M/year',
-      duration: '4-6 months',
-      courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
-      courseName: 'UI/UX Design'
-    },
-    {
-      id: 'ux-designer',
-      title: 'UX Designer',
-      description: 'Focuses on user experience, conducting research and creating wireframes.',
-      icon: <Users className="w-8 h-8 text-purple-600" />,
-      skills: ['User Research', 'Wireframing', 'Prototyping', 'User Testing'],
-      salary: '₦4-8M/year',
-      duration: '5-7 months',
+      skills: ['Figma', 'Adobe XD', 'User Research', 'Wireframing', 'Prototyping', 'Visual Design'],
+      salary: '',
+      duration: '4-7 months',
       courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
       courseName: 'UI/UX Design'
     },
@@ -277,7 +266,7 @@ const Index = () => {
       description: 'Combines UI/UX to design end-to-end digital products.',
       icon: <Target className="w-8 h-8 text-blue-700" />,
       skills: ['Product Strategy', 'User Research', 'Interface Design', 'Prototyping'],
-      salary: '₦5-10M/year',
+      salary: '',
       duration: '6-8 months',
       courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
       courseName: 'UI/UX Design'
@@ -289,7 +278,7 @@ const Index = () => {
       description: 'Builds apps for iOS or Android using Swift or Kotlin.',
       icon: <Smartphone className="w-8 h-8 text-blue-600" />,
       skills: ['Swift', 'Kotlin', 'React Native', 'Mobile UI'],
-      salary: '₦5-9M/year',
+      salary: '',
       duration: '6-10 months',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
@@ -300,7 +289,7 @@ const Index = () => {
       description: 'Tests mobile apps for functionality and user experience.',
       icon: <Shield className="w-8 h-8 text-green-700" />,
       skills: ['Testing Methodologies', 'Bug Reporting', 'User Experience', 'Quality Assurance'],
-      salary: '₦2-4M/year',
+      salary: '',
       duration: '2-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
@@ -311,7 +300,7 @@ const Index = () => {
       description: 'Designs intuitive interfaces for mobile apps.',
       icon: <Palette className="w-8 h-8 text-red-600" />,
       skills: ['Mobile Design', 'User Interface', 'App Prototyping', 'User Experience'],
-      salary: '₦4-7M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
@@ -323,7 +312,7 @@ const Index = () => {
       description: 'Runs online campaigns using SEO, social media, or Google Ads.',
       icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
       skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
-      salary: '₦3-6M/year',
+      salary: '',
       duration: '3-5 months',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
@@ -334,7 +323,7 @@ const Index = () => {
       description: 'Manages brand presence on platforms like Instagram or X.',
       icon: <MessageSquare className="w-8 h-8 text-pink-600" />,
       skills: ['Social Media Strategy', 'Content Planning', 'Community Management', 'Analytics'],
-      salary: '₦2-5M/year',
+      salary: '',
       duration: '2-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
@@ -345,7 +334,7 @@ const Index = () => {
       description: 'Creates engaging content like blogs or videos to drive traffic.',
       icon: <Video className="w-8 h-8 text-teal-600" />,
       skills: ['Content Creation', 'SEO Writing', 'Content Strategy', 'Brand Voice'],
-      salary: '₦3-6M/year',
+      salary: '',
       duration: '3-5 months',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
@@ -357,7 +346,7 @@ const Index = () => {
       description: 'Edits videos for ads, social media, or films using Adobe Premiere or Final Cut Pro.',
       icon: <Video className="w-8 h-8 text-red-600" />,
       skills: ['Adobe Premiere', 'Final Cut Pro', 'Motion Graphics', 'Color Grading'],
-      salary: '₦2-5M/year',
+      salary: '',
       duration: '3-5 months',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
@@ -368,7 +357,7 @@ const Index = () => {
       description: 'Creates animated visuals for videos or ads.',
       icon: <Video className="w-8 h-8 text-purple-700" />,
       skills: ['After Effects', 'Motion Design', 'Animation', 'Visual Effects'],
-      salary: '₦3-7M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
@@ -379,7 +368,7 @@ const Index = () => {
       description: 'Produces and edits video content for YouTube or TikTok.',
       icon: <Video className="w-8 h-8 text-green-800" />,
       skills: ['Video Production', 'Content Strategy', 'Social Media', 'Storytelling'],
-      salary: '₦2-6M/year',
+      salary: '',
       duration: '2-4 months',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
@@ -391,7 +380,7 @@ const Index = () => {
       description: 'Oversees tech projects, coordinating teams and timelines.',
       icon: <Users className="w-8 h-8 text-green-600" />,
       skills: ['Project Planning', 'Team Leadership', 'Agile', 'Communication'],
-      salary: '₦5-10M/year',
+      salary: '',
       duration: '4-6 months',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
@@ -402,7 +391,7 @@ const Index = () => {
       description: 'Guides product development from ideation to launch.',
       icon: <Target className="w-8 h-8 text-indigo-700" />,
       skills: ['Product Strategy', 'Market Research', 'Roadmap Planning', 'Stakeholder Management'],
-      salary: '₦6-12M/year',
+      salary: '',
       duration: '5-8 months',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
@@ -413,7 +402,7 @@ const Index = () => {
       description: 'Facilitates agile development processes and removes team blockers.',
       icon: <Users className="w-8 h-8 text-orange-700" />,
       skills: ['Scrum Framework', 'Agile Coaching', 'Team Facilitation', 'Process Improvement'],
-      salary: '₦4-8M/year',
+      salary: '',
       duration: '3-5 months',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
@@ -775,15 +764,20 @@ const Index = () => {
                             allowedSchemes: ['http', 'https', 'mailto'],
                             allowedStyles: {
                               '*': {
-                                'color': [/.*/],
-                                'background-color': [/.*/],
-                                'font-size': [/.*/],
-                                'font-weight': [/.*/],
-                                'text-align': [/.*/],
-                                'margin': [/.*/],
-                                'padding': [/.*/],
-                                'border': [/.*/],
-                                'text-decoration': [/.*/],
+                                 'color': [/.*/],
+                                 'background-color': [/.*/],
+                                 'font-size': [/.*/],
+                                 'font-weight': [/.*/],
+                                 'text-align': [/.*/],
+                                 'line-height': [/.*/],
+                                 'margin': [/.*/],
+                                 'margin-top': [/.*/],
+                                 'margin-bottom': [/.*/],
+                                 'padding': [/.*/],
+                                 'padding-top': [/.*/],
+                                 'padding-bottom': [/.*/],
+                                 'border': [/.*/],
+                                 'text-decoration': [/.*/],
                               }
                             }
                           }),
@@ -827,11 +821,7 @@ const Index = () => {
                                 </div>
                               </div>
                               
-                              <div className="grid grid-cols-2 gap-2 mb-3 pt-2 border-t border-gray-200">
-                                <div className="text-xs">
-                                  <span className="text-gray-600">Salary:</span>
-                                  <div className="font-semibold text-green-600">{career.salary}</div>
-                                </div>
+                               <div className="mb-3 pt-2 border-t border-gray-200">
                                 <div className="text-xs">
                                   <span className="text-gray-600">Duration:</span>
                                   <div className="font-semibold text-blue-600">{career.duration}</div>
