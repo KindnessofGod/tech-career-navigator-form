@@ -439,7 +439,7 @@ const Index = () => {
       key: 'activities' as keyof FormData,
       label: 'What activities do you enjoy most?',
       type: 'select',
-      options: ['Creating visuals', 'Solving technical problems', 'Helping people', 'Organizing tasks', 'Building physical devices', 'Promoting or marketing', 'Editing videos', 'Other'],
+      options: ['Creating visuals and designs', 'Building websites and web apps', 'Solving technical problems', 'Analyzing data and trends', 'Building mobile apps', 'Helping people', 'Organizing tasks', 'Building physical devices', 'Promoting or marketing', 'Editing videos', 'Other'],
       required: true,
       conditionalField: 'activitiesOther'
     },
@@ -454,7 +454,7 @@ const Index = () => {
       key: 'project' as keyof FormData,
       label: 'What kind of tech project excites you most?',
       type: 'select',
-      options: ['Creative projects (design, video)', 'Technical projects (coding, cybersecurity)', 'Management/marketing projects', 'Smart devices or IoT', 'Other'],
+      options: ['Web design and development projects', 'Mobile app development', 'Creative projects (graphic design, video)', 'Technical projects (coding, cybersecurity)', 'Data analysis and insights', 'Management/marketing projects', 'Smart devices or IoT', 'Other'],
       required: true,
       conditionalField: 'projectOther'
     },
