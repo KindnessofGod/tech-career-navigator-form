@@ -752,14 +752,17 @@ const Index = () => {
                   <CardContent>
                     {aiResponse ? (
                       <div
-                        className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
+                        className="ai-career-analysis text-gray-700 leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(aiResponse, {
-                            allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'ol', 'li', 'em', 'strong', 'div', 'pre', 'code', 'blockquote', 'hr'],
+                            allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'ol', 'li', 'em', 'strong', 'div', 'pre', 'code', 'blockquote', 'hr', 'table', 'thead', 'tbody', 'tr', 'td', 'th'],
                             allowedAttributes: {
                               '*': ['style', 'class'],
                               a: ['href', 'target', 'rel'],
                               img: ['src', 'alt', 'width', 'height'],
+                              table: ['border', 'cellpadding', 'cellspacing'],
+                              td: ['colspan', 'rowspan'],
+                              th: ['colspan', 'rowspan']
                             },
                             allowedSchemes: ['http', 'https', 'mailto'],
                             allowedStyles: {
@@ -768,16 +771,36 @@ const Index = () => {
                                  'background-color': [/.*/],
                                  'font-size': [/.*/],
                                  'font-weight': [/.*/],
+                                 'font-family': [/.*/],
                                  'text-align': [/.*/],
                                  'line-height': [/.*/],
                                  'margin': [/.*/],
                                  'margin-top': [/.*/],
                                  'margin-bottom': [/.*/],
+                                 'margin-left': [/.*/],
+                                 'margin-right': [/.*/],
                                  'padding': [/.*/],
                                  'padding-top': [/.*/],
                                  'padding-bottom': [/.*/],
+                                 'padding-left': [/.*/],
+                                 'padding-right': [/.*/],
                                  'border': [/.*/],
+                                 'border-top': [/.*/],
+                                 'border-bottom': [/.*/],
+                                 'border-left': [/.*/],
+                                 'border-right': [/.*/],
                                  'text-decoration': [/.*/],
+                                 'text-transform': [/.*/],
+                                 'display': [/.*/],
+                                 'width': [/.*/],
+                                 'height': [/.*/],
+                                 'max-width': [/.*/],
+                                 'min-height': [/.*/],
+                                 'list-style': [/.*/],
+                                 'list-style-type': [/.*/],
+                                 'white-space': [/.*/],
+                                 'word-wrap': [/.*/],
+                                 'overflow-wrap': [/.*/]
                               }
                             }
                           }),

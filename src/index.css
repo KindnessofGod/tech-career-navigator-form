@@ -101,3 +101,116 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom styles for AI Career Analysis HTML content */
+@layer components {
+  .ai-career-analysis {
+    @apply max-w-none;
+  }
+
+  .ai-career-analysis p {
+    @apply mb-4 leading-relaxed;
+  }
+
+  .ai-career-analysis h1,
+  .ai-career-analysis h2,
+  .ai-career-analysis h3,
+  .ai-career-analysis h4,
+  .ai-career-analysis h5,
+  .ai-career-analysis h6 {
+    @apply font-semibold mb-3 mt-6 first:mt-0;
+  }
+
+  .ai-career-analysis h1 {
+    @apply text-2xl;
+  }
+
+  .ai-career-analysis h2 {
+    @apply text-xl;
+  }
+
+  .ai-career-analysis h3 {
+    @apply text-lg;
+  }
+
+  .ai-career-analysis ul,
+  .ai-career-analysis ol {
+    @apply my-4 pl-6 space-y-2;
+  }
+
+  .ai-career-analysis ul {
+    @apply list-disc;
+  }
+
+  .ai-career-analysis ol {
+    @apply list-decimal;
+  }
+
+  .ai-career-analysis li {
+    @apply mb-1 leading-relaxed;
+  }
+
+  .ai-career-analysis li p {
+    @apply mb-2;
+  }
+
+  .ai-career-analysis strong,
+  .ai-career-analysis b {
+    @apply font-semibold;
+  }
+
+  .ai-career-analysis em,
+  .ai-career-analysis i {
+    @apply italic;
+  }
+
+  .ai-career-analysis br {
+    @apply mb-2;
+  }
+
+  .ai-career-analysis div {
+    @apply mb-2;
+  }
+
+  .ai-career-analysis blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-4;
+  }
+
+  .ai-career-analysis hr {
+    @apply border-gray-300 my-6;
+  }
+
+  .ai-career-analysis table {
+    @apply w-full border-collapse my-4;
+  }
+
+  .ai-career-analysis th,
+  .ai-career-analysis td {
+    @apply border border-gray-300 px-3 py-2 text-left;
+  }
+
+  .ai-career-analysis th {
+    @apply bg-gray-100 font-semibold;
+  }
+
+  /* Preserve inline styles from webhook */
+  .ai-career-analysis [style*="margin"],
+  .ai-career-analysis [style*="padding"],
+  .ai-career-analysis [style*="color"],
+  .ai-career-analysis [style*="font-size"],
+  .ai-career-analysis [style*="font-weight"],
+  .ai-career-analysis [style*="line-height"] {
+    /* Inline styles take precedence, this ensures they're not overridden */
+  }
+
+  /* Ensure lists have proper spacing even with inline styles */
+  .ai-career-analysis ul li:not(:last-child),
+  .ai-career-analysis ol li:not(:last-child) {
+    @apply mb-1;
+  }
+
+  /* Ensure paragraphs in lists have proper spacing */
+  .ai-career-analysis li > p:last-child {
+    @apply mb-0;
+  }
+}
