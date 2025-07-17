@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Brain, ArrowRight, Sparkles, Code, Palette, Shield, BarChart3, Users, MessageSquare, Smartphone, Home, Target, Video, TrendingUp, Zap } from 'lucide-react';
+import { Crown, Wand2, Sparkles, Scroll, Shield, Gem, Flame, Zap, Star, BookOpen, Swords, Map, Eye, Atom, Brush, Smartphone, Home, Users, Target, ArrowRight, MessageSquare, Video, TrendingUp, Palette, Code, BarChart3, Brain } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import sanitizeHtml from 'sanitize-html';
 
@@ -33,7 +33,7 @@ interface FormData {
   learningStyleOther: string;
 }
 
-interface CareerCard {
+interface CareerCrystal {
   id: string;
   title: string;
   description: string;
@@ -76,334 +76,334 @@ const Index = () => {
   const [visibleCareers, setVisibleCareers] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // All 30 career cards
-  const allCareers: CareerCard[] = [
-    // Data Analytics
+  // All 30 career crystals with fantasy themes
+  const allCareers: CareerCrystal[] = [
+    // Data Analytics - Crystal of Insight
     {
       id: 'data-analyst',
-      title: 'Data Analyst',
-      description: 'Analyzes datasets to uncover trends and insights, using tools like Excel, Tableau, or Python.',
-      icon: <BarChart3 className="w-8 h-8 text-blue-500" />,
-      skills: ['Excel', 'Python', 'Tableau', 'Statistics'],
+      title: 'Oracle of Data',
+      description: 'Peer into the mystical realm of data to reveal hidden patterns and ancient wisdom using sacred scrolls and crystal tablets.',
+      icon: <Gem className="w-8 h-8 text-blue-500" />,
+      skills: ['Excel Scrolls', 'Python Runes', 'Tableau Visions', 'Ancient Statistics'],
       salary: '',
-      duration: '3-6 months',
+      duration: '3-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
     },
     {
       id: 'business-intelligence-analyst',
-      title: 'Business Intelligence Analyst',
-      description: 'Transforms data into actionable business strategies, creating reports and dashboards.',
-      icon: <BarChart3 className="w-8 h-8 text-green-500" />,
-      skills: ['SQL', 'Power BI', 'Business Analysis', 'Data Visualization'],
+      title: 'Sage of Business Wisdom',
+      description: 'Transform raw data into strategic prophecies, crafting mystical reports and enchanted dashboards.',
+      icon: <Crown className="w-8 h-8 text-green-500" />,
+      skills: ['SQL Incantations', 'Power BI Crystals', 'Ancient Business Arts', 'Vision Weaving'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
     },
     {
       id: 'market-research-analyst',
-      title: 'Market Research Analyst',
-      description: 'Studies consumer behavior to inform marketing strategies, using data to predict trends.',
-      icon: <TrendingUp className="w-8 h-8 text-purple-500" />,
-      skills: ['Market Research', 'Statistics', 'Survey Design', 'Consumer Psychology'],
+      title: 'Seer of Market Prophecies',
+      description: 'Study the behaviors of distant kingdoms to divine future trends and trading opportunities.',
+      icon: <Eye className="w-8 h-8 text-purple-500" />,
+      skills: ['Market Divination', 'Statistical Prophecy', 'Survey Enchantments', 'Mind Reading'],
       salary: '',
-      duration: '3-4 months',
+      duration: '3-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/data-analytics',
       courseName: 'Data Analytics'
     },
-    // Web Development
+    // Web Development - Arcane Web Weaving
     {
       id: 'front-end-developer',
-      title: 'Front-End Developer',
-      description: 'Builds user-facing website elements using HTML, CSS, and JavaScript.',
-      icon: <Palette className="w-8 h-8 text-purple-500" />,
-      skills: ['HTML', 'CSS', 'JavaScript', 'React'],
+      title: 'Weaver of Visual Spells',
+      description: 'Craft enchanting user interfaces using ancient HTML scrolls, CSS potions, and JavaScript incantations.',
+      icon: <Brush className="w-8 h-8 text-purple-500" />,
+      skills: ['HTML Scrolls', 'CSS Potions', 'JavaScript Spells', 'React Enchantments'],
       salary: '',
-      duration: '4-8 months',
+      duration: '4-8 moons',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
     },
     {
       id: 'back-end-developer',
-      title: 'Back-End Developer',
-      description: 'Manages server-side logic and databases using Python or Node.js.',
-      icon: <Code className="w-8 h-8 text-green-500" />,
-      skills: ['Python', 'Node.js', 'Databases', 'APIs'],
+      title: 'Keeper of Server Realms',
+      description: 'Guard and manage the hidden server sanctuaries using Python serpents and Node.js spirits.',
+      icon: <Swords className="w-8 h-8 text-green-500" />,
+      skills: ['Python Serpents', 'Node.js Spirits', 'Database Vaults', 'API Gateways'],
       salary: '',
-      duration: '6-10 months',
+      duration: '6-10 moons',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
     },
     {
       id: 'full-stack-developer',
-      title: 'Full-Stack Developer',
-      description: 'Handles both front-end and back-end, creating complete web apps.',
-      icon: <Code className="w-8 h-8 text-blue-500" />,
-      skills: ['HTML/CSS', 'JavaScript', 'Backend Languages', 'Databases'],
+      title: 'Master of All Realms',
+      description: 'Command both the visible and hidden realms of web magic, wielding complete arcane knowledge.',
+      icon: <Crown className="w-8 h-8 text-blue-500" />,
+      skills: ['Universal Spells', 'Realm Mastery', 'Complete Wizardry', 'Omnipotent Coding'],
       salary: '',
-      duration: '8-12 months',
+      duration: '8-12 moons',
       courseLink: 'https://www.palmtechniq.com/courses/web-development',
       courseName: 'Web Development'
     },
-    // Smart-home Automation
+    // Smart-home Automation - Enchanted Dwelling Magic
     {
       id: 'iot-developer',
-      title: 'IoT Developer',
-      description: 'Designs and programs smart devices like home security systems using IoT platforms.',
+      title: 'Enchanter of Mystical Devices',
+      description: 'Breathe life into inanimate objects, creating magical home guardians and sentient household spirits.',
       icon: <Home className="w-8 h-8 text-teal-500" />,
-      skills: ['IoT Platforms', 'Arduino', 'Raspberry Pi', 'Sensors'],
+      skills: ['Device Enchantment', 'Arduino Familiars', 'Raspberry Pi Spirits', 'Sensor Spells'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
     },
     {
       id: 'smart-home-technician',
-      title: 'Smart Home Technician',
-      description: 'Installs and maintains smart devices like thermostats or lighting systems.',
+      title: 'Guardian of Enchanted Dwellings',
+      description: 'Install and maintain magical household spirits like temperature wraiths and illumination sprites.',
       icon: <Zap className="w-8 h-8 text-yellow-500" />,
-      skills: ['Device Installation', 'Network Setup', 'Troubleshooting', 'Customer Service'],
+      skills: ['Spirit Binding', 'Mystical Networks', 'Troubleshooting Curses', 'Homeowner Relations'],
       salary: '',
-      duration: '2-4 months',
+      duration: '2-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
     },
     {
       id: 'automation-consultant',
-      title: 'Automation Consultant',
-      description: 'Advises clients on integrating smart solutions for homes or offices.',
+      title: 'Sage of Automated Kingdoms',
+      description: 'Advise nobles on integrating magical solutions into their castles and keeps.',
       icon: <Target className="w-8 h-8 text-indigo-500" />,
-      skills: ['Consulting', 'System Design', 'Client Management', 'Smart Technologies'],
+      skills: ['Royal Consulting', 'Castle Design', 'Noble Relations', 'Magical Technologies'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/smart-home-automation',
       courseName: 'Smart-home Automation'
     },
-    // Cybersecurity
+    // Cybersecurity - Shield of Digital Realms
     {
       id: 'cybersecurity-analyst',
-      title: 'Cybersecurity Analyst',
-      description: 'Protects systems from threats by identifying vulnerabilities.',
+      title: 'Defender of Digital Realms',
+      description: 'Protect the kingdom from dark sorcerers and malevolent spirits seeking to breach our defenses.',
       icon: <Shield className="w-8 h-8 text-red-500" />,
-      skills: ['Network Security', 'Threat Analysis', 'Firewalls', 'Risk Assessment'],
+      skills: ['Protective Wards', 'Threat Divination', 'Firewall Barriers', 'Risk Assessment'],
       salary: '',
-      duration: '6-8 months',
+      duration: '6-8 moons',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
     },
     {
       id: 'penetration-tester',
-      title: 'Penetration Tester',
-      description: 'Simulates cyberattacks to test system security.',
-      icon: <Shield className="w-8 h-8 text-orange-500" />,
-      skills: ['Ethical Hacking', 'Security Testing', 'Vulnerability Assessment', 'Reporting'],
+      title: 'White Hat Infiltrator',
+      description: 'Practice benevolent dark arts to test the strength of our magical defenses.',
+      icon: <Swords className="w-8 h-8 text-orange-500" />,
+      skills: ['Righteous Hacking', 'Defense Testing', 'Weakness Divination', 'Battle Reports'],
       salary: '',
-      duration: '6-10 months',
+      duration: '6-10 moons',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
     },
     {
       id: 'security-consultant',
-      title: 'Security Consultant',
-      description: 'Advises organizations on security strategies and compliance.',
-      icon: <Shield className="w-8 h-8 text-gray-500" />,
-      skills: ['Security Strategy', 'Compliance', 'Risk Management', 'Policy Development'],
+      title: 'Grand Advisor of Protection',
+      description: 'Counsel kingdoms on defensive strategies and ancient protection protocols.',
+      icon: <Crown className="w-8 h-8 text-gray-500" />,
+      skills: ['Strategic Defense', 'Ancient Protocols', 'Risk Prophecy', 'Policy Crafting'],
       salary: '',
-      duration: '6-8 months',
+      duration: '6-8 moons',
       courseLink: 'https://www.palmtechniq.com/courses/cybersecurity',
       courseName: 'Cybersecurity'
     },
-    // Graphic Design
+    // Graphic Design - Artisan of Visual Magic
     {
       id: 'graphic-designer',
-      title: 'Graphic Designer',
-      description: 'Creates visuals like logos and marketing materials using Adobe Photoshop or Illustrator.',
-      icon: <Palette className="w-8 h-8 text-pink-500" />,
-      skills: ['Photoshop', 'Illustrator', 'Brand Design', 'Typography'],
+      title: 'Artisan of Visual Magic',
+      description: 'Create mystical sigils and enchanted scrolls using ancient Photoshop grimoires and Illustrator spells.',
+      icon: <Brush className="w-8 h-8 text-pink-500" />,
+      skills: ['Photoshop Grimoires', 'Illustrator Spells', 'Sigil Crafting', 'Runic Typography'],
       salary: '',
-      duration: '3-6 months',
+      duration: '3-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
     },
     {
       id: 'brand-identity-designer',
-      title: 'Brand Identity Designer',
-      description: 'Develops cohesive visual branding for companies.',
-      icon: <Palette className="w-8 h-8 text-blue-600" />,
-      skills: ['Brand Strategy', 'Logo Design', 'Style Guides', 'Creative Direction'],
+      title: 'Forger of Kingdom Identities',
+      description: 'Develop cohesive visual heraldry and mystical emblems for noble houses.',
+      icon: <Star className="w-8 h-8 text-blue-600" />,
+      skills: ['Heraldic Strategy', 'Emblem Forging', 'Royal Style Guides', 'Creative Mastery'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
     },
     {
       id: 'social-media-content-creator',
-      title: 'Social Media Content Creator',
-      description: 'Designs graphics for social media campaigns.',
-      icon: <MessageSquare className="w-8 h-8 text-green-600" />,
-      skills: ['Social Media Design', 'Content Creation', 'Brand Consistency', 'Trend Analysis'],
+      title: 'Scribe of Digital Scrolls',
+      description: 'Craft enchanted messages and visual spells for the magical communication networks.',
+      icon: <Scroll className="w-8 h-8 text-green-600" />,
+      skills: ['Message Enchantment', 'Visual Spellcrafting', 'Brand Consistency', 'Trend Divination'],
       salary: '',
-      duration: '2-4 months',
+      duration: '2-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/graphic-design',
       courseName: 'Graphic Design'
     },
-    // UI/UX Design
+    // UI/UX Design - Experience Enchanter
     {
       id: 'ui-ux-designer',
-      title: 'UI/UX Designer',
-      description: 'Designs visually appealing interfaces and focuses on user experience, combining visual design with user research and prototyping.',
-      icon: <Smartphone className="w-8 h-8 text-indigo-500" />,
-      skills: ['Figma', 'Adobe XD', 'User Research', 'Wireframing', 'Prototyping', 'Visual Design'],
+      title: 'Enchanter of User Experiences',
+      description: 'Design intuitive magical interfaces that guide users through mystical journeys with ease and wonder.',
+      icon: <Wand2 className="w-8 h-8 text-indigo-500" />,
+      skills: ['Figma Crystals', 'Adobe XD Grimoires', 'User Mind Reading', 'Experience Weaving'],
       salary: '',
-      duration: '4-7 months',
+      duration: '4-7 moons',
       courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
       courseName: 'UI/UX Design'
     },
     {
       id: 'product-designer',
-      title: 'Product Designer',
-      description: 'Combines UI/UX to design end-to-end digital products.',
-      icon: <Target className="w-8 h-8 text-blue-700" />,
-      skills: ['Product Strategy', 'User Research', 'Interface Design', 'Prototyping'],
+      title: 'Architect of Magical Experiences',
+      description: 'Combine interface sorcery with user empathy to create complete enchanted products.',
+      icon: <Gem className="w-8 h-8 text-blue-700" />,
+      skills: ['Product Prophecy', 'User Research', 'Interface Mastery', 'Experience Prototyping'],
       salary: '',
-      duration: '6-8 months',
+      duration: '6-8 moons',
       courseLink: 'https://www.palmtechniq.com/courses/ui-ux-designing',
       courseName: 'UI/UX Design'
     },
-    // Mobile App Development
+    // Mobile App Development - Pocket Realm Creation
     {
       id: 'mobile-app-developer',
-      title: 'Mobile App Developer',
-      description: 'Builds apps for iOS or Android using Swift or Kotlin.',
+      title: 'Creator of Pocket Realms',
+      description: 'Build portable magical worlds for mystical devices using Swift runes and Kotlin spells.',
       icon: <Smartphone className="w-8 h-8 text-blue-600" />,
-      skills: ['Swift', 'Kotlin', 'React Native', 'Mobile UI'],
+      skills: ['Swift Runes', 'Kotlin Spells', 'React Native Magic', 'Pocket Interface Design'],
       salary: '',
-      duration: '6-10 months',
+      duration: '6-10 moons',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
     },
     {
       id: 'app-tester',
-      title: 'App Tester',
-      description: 'Tests mobile apps for functionality and user experience.',
+      title: 'Guardian of App Quality',
+      description: 'Test magical applications to ensure they work flawlessly in the hands of common folk.',
       icon: <Shield className="w-8 h-8 text-green-700" />,
-      skills: ['Testing Methodologies', 'Bug Reporting', 'User Experience', 'Quality Assurance'],
+      skills: ['Testing Rituals', 'Bug Hunting', 'User Experience', 'Quality Assurance'],
       salary: '',
-      duration: '2-4 months',
+      duration: '2-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
     },
     {
       id: 'app-ui-ux-designer',
-      title: 'App UI/UX Designer',
-      description: 'Designs intuitive interfaces for mobile apps.',
-      icon: <Palette className="w-8 h-8 text-red-600" />,
-      skills: ['Mobile Design', 'User Interface', 'App Prototyping', 'User Experience'],
+      title: 'Designer of Pocket Interfaces',
+      description: 'Create intuitive magical interfaces specifically crafted for handheld mystical devices.',
+      icon: <Wand2 className="w-8 h-8 text-red-600" />,
+      skills: ['Pocket Design', 'Touch Interface Magic', 'App Experience Weaving', 'Mobile Sorcery'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/mobile-app-development',
       courseName: 'Mobile App Development'
     },
-    // Digital Marketing
+    // Digital Marketing - Herald of the Digital Realm
     {
       id: 'digital-marketing-specialist',
-      title: 'Digital Marketing Specialist',
-      description: 'Runs online campaigns using SEO, social media, or Google Ads.',
-      icon: <TrendingUp className="w-8 h-8 text-orange-500" />,
-      skills: ['SEO', 'Google Ads', 'Social Media', 'Analytics'],
+      title: 'Herald of Digital Kingdoms',
+      description: 'Spread word of magical services across the digital realm using SEO enchantments and social media spells.',
+      icon: <Flame className="w-8 h-8 text-orange-500" />,
+      skills: ['SEO Enchantments', 'Ad Magic', 'Social Media Spells', 'Analytics Divination'],
       salary: '',
-      duration: '3-5 months',
+      duration: '3-5 moons',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
     },
     {
       id: 'social-media-manager',
-      title: 'Social Media Manager',
-      description: 'Manages brand presence on platforms like Instagram or X.',
+      title: 'Keeper of Digital Realms',
+      description: 'Maintain the magical presence of noble houses across the mystical social networks.',
       icon: <MessageSquare className="w-8 h-8 text-pink-600" />,
-      skills: ['Social Media Strategy', 'Content Planning', 'Community Management', 'Analytics'],
+      skills: ['Social Strategy', 'Content Scrolls', 'Community Shepherding', 'Network Analytics'],
       salary: '',
-      duration: '2-4 months',
+      duration: '2-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
     },
     {
       id: 'content-marketer',
-      title: 'Content Marketer',
-      description: 'Creates engaging content like blogs or videos to drive traffic.',
-      icon: <Video className="w-8 h-8 text-teal-600" />,
-      skills: ['Content Creation', 'SEO Writing', 'Content Strategy', 'Brand Voice'],
+      title: 'Master Storyteller',
+      description: 'Weave engaging tales and mystical content to enchant audiences and drive them to action.',
+      icon: <BookOpen className="w-8 h-8 text-teal-600" />,
+      skills: ['Story Weaving', 'SEO Magic', 'Content Strategy', 'Voice Enchantment'],
       salary: '',
-      duration: '3-5 months',
+      duration: '3-5 moons',
       courseLink: 'https://www.palmtechniq.com/courses/digital-marketing',
       courseName: 'Digital Marketing'
     },
-    // Video Editing
+    // Video Editing - Master of Moving Images
     {
       id: 'video-editor',
-      title: 'Video Editor',
-      description: 'Edits videos for ads, social media, or films using Adobe Premiere or Final Cut Pro.',
+      title: 'Sorcerer of Moving Pictures',
+      description: 'Edit mystical moving images for royal proclamations and magical social networks using ancient Adobe tools.',
       icon: <Video className="w-8 h-8 text-red-600" />,
-      skills: ['Adobe Premiere', 'Final Cut Pro', 'Motion Graphics', 'Color Grading'],
+      skills: ['Adobe Premiere Grimoires', 'Final Cut Spells', 'Motion Graphics', 'Color Alchemy'],
       salary: '',
-      duration: '3-5 months',
+      duration: '3-5 moons',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
     },
     {
       id: 'motion-graphics-designer',
-      title: 'Motion Graphics Designer',
-      description: 'Creates animated visuals for videos or ads.',
-      icon: <Video className="w-8 h-8 text-purple-700" />,
-      skills: ['After Effects', 'Motion Design', 'Animation', 'Visual Effects'],
+      title: 'Animator of Mystical Visions',
+      description: 'Bring static images to life through powerful animation magic and visual effects.',
+      icon: <Sparkles className="w-8 h-8 text-purple-700" />,
+      skills: ['After Effects Sorcery', 'Motion Magic', 'Animation Spells', 'Visual Effects'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
     },
     {
       id: 'content-creator',
-      title: 'Content Creator',
-      description: 'Produces and edits video content for YouTube or TikTok.',
-      icon: <Video className="w-8 h-8 text-green-800" />,
-      skills: ['Video Production', 'Content Strategy', 'Social Media', 'Storytelling'],
+      title: 'Bard of Digital Realms',
+      description: 'Create and perform enchanting video content for the mystical viewing crystals of the realm.',
+      icon: <Star className="w-8 h-8 text-green-800" />,
+      skills: ['Video Craft', 'Content Strategy', 'Social Media', 'Epic Storytelling'],
       salary: '',
-      duration: '2-4 months',
+      duration: '2-4 moons',
       courseLink: 'https://www.palmtechniq.com/courses/video-editing',
       courseName: 'Video Editing'
     },
-    // Project Management
+    // Project Management - Quest Master
     {
       id: 'project-manager',
-      title: 'Project Manager',
-      description: 'Oversees tech projects, coordinating teams and timelines.',
-      icon: <Users className="w-8 h-8 text-green-600" />,
-      skills: ['Project Planning', 'Team Leadership', 'Agile', 'Communication'],
+      title: 'Quest Master',
+      description: 'Lead brave adventuring parties through complex magical projects, ensuring all reach their destination.',
+      icon: <Map className="w-8 h-8 text-green-600" />,
+      skills: ['Quest Planning', 'Party Leadership', 'Agile Adventures', 'Mystical Communication'],
       salary: '',
-      duration: '4-6 months',
+      duration: '4-6 moons',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
     },
     {
       id: 'product-manager',
-      title: 'Product Manager',
-      description: 'Guides product development from ideation to launch.',
-      icon: <Target className="w-8 h-8 text-indigo-700" />,
-      skills: ['Product Strategy', 'Market Research', 'Roadmap Planning', 'Stakeholder Management'],
+      title: 'Visionary of Magical Products',
+      description: 'Guide the creation of mystical products from initial vision to triumphant launch.',
+      icon: <Crown className="w-8 h-8 text-indigo-700" />,
+      skills: ['Product Prophecy', 'Market Divination', 'Strategic Planning', 'Stakeholder Diplomacy'],
       salary: '',
-      duration: '5-8 months',
+      duration: '5-8 moons',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
     },
     {
       id: 'scrum-master',
-      title: 'Scrum Master',
-      description: 'Facilitates agile development processes and removes team blockers.',
-      icon: <Users className="w-8 h-8 text-orange-700" />,
-      skills: ['Scrum Framework', 'Agile Coaching', 'Team Facilitation', 'Process Improvement'],
+      title: 'Agile Ritual Master',
+      description: 'Facilitate sacred development rituals and remove obstacles from the path of your fellowship.',
+      icon: <Wand2 className="w-8 h-8 text-orange-700" />,
+      skills: ['Scrum Rituals', 'Agile Coaching', 'Team Harmony', 'Process Enchantment'],
       salary: '',
-      duration: '3-5 months',
+      duration: '3-5 moons',
       courseLink: 'https://www.palmtechniq.com/courses/project-management',
       courseName: 'Project Management'
     }
@@ -412,112 +412,112 @@ const Index = () => {
   const questions = [
     {
       key: 'name' as keyof FormData,
-      label: 'Name',
+      label: 'What is your name, brave seeker?',
       type: 'text',
-      placeholder: 'Your name',
+      placeholder: 'Enter your name...',
       required: true
     },
     {
       key: 'whatsappNumber' as keyof FormData,
-      label: 'WhatsApp Number',
+      label: 'What is your magical communication crystal number?',
       type: 'text',
       placeholder: 'e.g., +2349123456789',
       required: true
     },
     {
       key: 'activities' as keyof FormData,
-      label: 'What activities do you enjoy most?',
+      label: 'Which mystical activities bring you the most joy?',
       type: 'select',
-      options: ['Creating visuals and designs', 'Building websites and web apps', 'Solving technical problems', 'Analyzing data and trends', 'Building mobile apps', 'Helping people', 'Organizing tasks', 'Building physical devices', 'Promoting or marketing', 'Editing videos', 'Other'],
+      options: ['Crafting visual enchantments', 'Weaving web spells', 'Solving arcane puzzles', 'Divining data patterns', 'Creating pocket realms', 'Helping fellow adventurers', 'Organizing quests', 'Enchanting physical objects', 'Spreading word of kingdoms', 'Creating moving pictures', 'Other magical pursuits'],
       required: true,
       conditionalField: 'activitiesOther'
     },
     {
       key: 'preference' as keyof FormData,
-      label: 'Are you more interested in making things look good or making them work?',
+      label: 'Do you prefer making things beautiful or making them functional?',
       type: 'select',
-      options: ['Look good', 'Work well', 'Both', 'Not sure'],
+      options: ['Beautiful enchantments', 'Functional magic', 'Both equally', 'I seek guidance'],
       required: true
     },
     {
       key: 'project' as keyof FormData,
-      label: 'What kind of tech project excites you most?',
+      label: 'What type of magical project calls to your spirit?',
       type: 'select',
-      options: ['Web design and development projects', 'Mobile app development', 'Creative projects (graphic design, video)', 'Technical projects (coding, cybersecurity)', 'Data analysis and insights', 'Management/marketing projects', 'Smart devices or IoT', 'Other'],
+      options: ['Web realm creation', 'Pocket realm development', 'Visual magic projects', 'Technical sorcery', 'Data divination', 'Quest management', 'Enchanted device creation', 'Other mystical pursuits'],
       required: true,
       conditionalField: 'projectOther'
     },
     {
       key: 'workFocus' as keyof FormData,
-      label: 'Do you prefer working on creative designs, technical systems, or managing processes?',
+      label: 'Do you prefer crafting visual magic, building technical systems, or managing mystical processes?',
       type: 'select',
-      options: ['Creative designs', 'Technical systems', 'Managing processes', 'Not sure'],
+      options: ['Visual magic crafting', 'Technical system building', 'Process management', 'I seek guidance'],
       required: true
     },
     {
       key: 'workStyle' as keyof FormData,
-      label: 'Do you like variety or mastering one task?',
+      label: 'Do you prefer variety in your magical pursuits or mastering one specific art?',
       type: 'select',
-      options: ['Variety', 'Mastery', 'Both'],
+      options: ['Variety in magic', 'Mastery of one art', 'Both paths appeal to me'],
       required: true
     },
     {
       key: 'skills' as keyof FormData,
-      label: 'What are you good at from past work or school?',
+      label: 'What natural talents do you possess from your past adventures?',
       type: 'select',
-      options: ['Communication', 'Numbers/math', 'Planning', 'Design/creativity', 'Technical troubleshooting', 'Marketing', 'Video editing', 'Other'],
+      options: ['Diplomatic communication', 'Numerical divination', 'Strategic planning', 'Creative enchantment', 'Technical problem-solving', 'Persuasive storytelling', 'Visual spellcrafting', 'Other hidden talents'],
       required: true,
       conditionalField: 'skillsOther'
     },
     {
       key: 'tools' as keyof FormData,
-      label: 'Have you used tools like Excel, Google Sheets, design apps, or coding platforms?',
+      label: 'Have you wielded magical tools like Excel scrolls, design crystals, or coding grimoires?',
       type: 'select',
-      options: ['Yes', 'No'],
+      options: ['Yes, I have experience', 'No, I am new to these arts'],
       required: true
     },
     {
       key: 'strength' as keyof FormData,
-      label: 'Are you good at spotting details, fixing problems, or leading teams?',
+      label: 'What is your greatest strength in facing challenges?',
       type: 'select',
-      options: ['Spotting details', 'Fixing problems', 'Leading teams', 'None of these'],
+      options: ['Spotting hidden details', 'Solving complex problems', 'Leading brave companions', 'None of these describe me'],
       required: true
     },
     {
       key: 'techExposure' as keyof FormData,
-      label: 'Have you ever tried any tech-related activities (e.g., coding, designing, or managing projects)?',
+      label: 'Have you ever dabbled in the mystical arts of technology?',
       type: 'select',
-      options: ['Yes, a little', 'No, never', 'Other'],
+      options: ['Yes, I have some knowledge', 'No, I am a complete novice', 'Other experience'],
       required: true,
       conditionalField: 'techExposureOther'
     },
     {
       key: 'motivation' as keyof FormData,
-      label: 'What motivates you to enter tech?',
+      label: 'What drives you to seek mastery in the technological arts?',
       type: 'select',
-      options: ['High-paying jobs', 'Creative expression', 'Solving real-world problems', 'Other'],
+      options: ['Seeking treasure and wealth', 'Expressing creative magic', 'Solving problems that help others', 'Other noble pursuits'],
       required: true,
       conditionalField: 'motivationOther'
     },
     {
       key: 'studyHours' as keyof FormData,
-      label: 'How many hours can you study weekly?',
+      label: 'How many hours per week can you dedicate to studying the magical arts?',
       type: 'select',
-      options: ['1–5', '5–10', '10–20', '20+'],
+      options: ['1–5 hours', '5–10 hours', '10–20 hours', '20+ hours'],
       required: true
     },
     {
       key: 'device' as keyof FormData,
-      label: 'What device do you use most for learning?',
+      label: 'What magical device do you use most for learning?',
       type: 'select',
-      options: ['Smartphone', 'Laptop', 'Both'],
+      options: ['Pocket crystal (smartphone)', 'Mystical codex (laptop)', 'Both equally'],
       required: true
     },
     {
       key: 'learningStyle' as keyof FormData,
-      label: 'How do you learn best?',
+      label: 'How do you best absorb mystical knowledge?',
       type: 'select',
-      options: ['Videos', 'Reading', 'Hands-on projects', 'Classes', 'Other'],
+      options: ['Watching moving pictures', 'Reading ancient texts', 'Hands-on practice', 'Guided lessons', 'Other learning methods'],
       required: true,
       conditionalField: 'learningStyleOther'
     }
@@ -569,16 +569,16 @@ const Index = () => {
       setVisibleCareers(careers);
 
       toast({
-        title: 'Form Submitted!',
-        description: 'Your career assessment has been submitted successfully.',
+        title: 'Prophecy Revealed!',
+        description: 'Your destined path has been divined successfully.',
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      setAiResponse('Thank you for completing the assessment! Based on your responses, we have generated personalized career recommendations for you.');
-      setVisibleCareers(['Project Manager', 'Digital Marketing Specialist']);
+      setAiResponse('Greetings, brave seeker! The ancient spirits have spoken and revealed your destined path in the mystical realm of technology.');
+      setVisibleCareers(['Quest Master', 'Herald of Digital Kingdoms']);
       toast({
-        title: 'Submission Error',
-        description: 'There was an error submitting your form. Please try again.',
+        title: 'Divination Interrupted',
+        description: 'The mystical forces were disrupted. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -616,17 +616,17 @@ const Index = () => {
       setShowResults(true);
 
       toast({
-        title: 'Test Webhook Success!',
-        description: 'Test webhook called successfully.',
+        title: 'Test Spell Successful!',
+        description: 'The mystical connection has been tested successfully.',
       });
     } catch (error) {
       console.error('Error calling test webhook:', error);
-      setAiResponse('Thank you for completing the assessment! Based on your responses, we have generated personalized career recommendations for you.');
-      setVisibleCareers(['Project Manager', 'Digital Marketing Specialist']);
+      setAiResponse('Greetings, brave seeker! The ancient spirits have spoken and revealed your destined path in the mystical realm of technology.');
+      setVisibleCareers(['Quest Master', 'Herald of Digital Kingdoms']);
       setShowResults(true);
       toast({
-        title: 'Test Webhook Error',
-        description: 'There was an error calling the test webhook.',
+        title: 'Test Spell Failed',
+        description: 'The mystical connection encountered interference.',
         variant: 'destructive',
       });
     } finally {
@@ -649,8 +649,8 @@ const Index = () => {
     const currentQuestion = questions[currentStep];
     if (currentQuestion.required && !formData[currentQuestion.key]) {
       toast({
-        title: "Required Field",
-        description: "Please fill in this field before continuing.",
+        title: "Ancient Requirement",
+        description: "The spirits require this knowledge before we can proceed.",
         variant: "destructive"
       });
       return;
@@ -662,8 +662,8 @@ const Index = () => {
       await submitFormData(formData);
       setShowResults(true);
       toast({
-        title: "Analysis Complete!",
-        description: "Your personalized career recommendations are ready.",
+        title: "Destiny Revealed!",
+        description: "Your personalized path through the mystical realm awaits.",
       });
     }
   };
@@ -717,42 +717,46 @@ const Index = () => {
 
   if (showResults) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen relative" style={{
+        backgroundImage: `url(/lovable-uploads/9aefbf18-e715-441c-bf8b-2eb197955cd0.png)`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 to-background/95"></div>
+        <div className="relative z-10 container mx-auto px-4 py-8">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full mb-4">
-              <Sparkles className="w-5 h-5" />
-              <span className="font-semibold">Career Recommendations</span>
+            <div className="inline-flex items-center gap-2 mystical-button text-primary-foreground px-6 py-3 rounded-full mb-4">
+              <Crown className="w-5 h-5" />
+              <span className="font-semibold">Destiny Revealed</span>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-              Perfect Matches for {formData.name}
+            <h1 className="ancient-title">
+              Perfect Paths for {formData.name}
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Based on your responses, here are the tech career paths that align best with your interests and skills.
+            <p className="sorcerer-subtitle max-w-2xl mx-auto">
+              The ancient spirits have gazed into your soul and revealed the mystical career paths that align with your destiny.
             </p>
           </div>
 
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 mb-8">
               
-              {/* Left Side - AI Response Section */}
+              {/* Left Side - Sorcerer's Analysis */}
               <div className="lg:col-span-1">
-                <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg h-full">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full">
-                        <MessageSquare className="w-6 h-6 text-blue-600" />
+                <div className="fantasy-card h-full">
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="p-3 bg-primary/20 rounded-full">
+                        <Wand2 className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl font-bold text-gray-800">AI Career Analysis</CardTitle>
-                        <CardDescription className="text-gray-600">Personalized insights based on your responses</CardDescription>
+                        <h2 className="text-xl font-bold magical-text">Sorcerer's Analysis</h2>
+                        <p className="text-muted-foreground">Ancient wisdom reveals your true calling</p>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
                     {aiResponse ? (
                       <div
-                        className="ai-career-analysis text-gray-700 leading-relaxed"
+                        className="ai-career-analysis text-foreground leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(aiResponse, {
                             allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'b', 'i', 'span', 'a', 'br', 'ul', 'ol', 'li', 'em', 'strong', 'div', 'pre', 'code', 'blockquote', 'hr', 'table', 'thead', 'tbody', 'tr', 'td', 'th'],
@@ -808,66 +812,64 @@ const Index = () => {
                       />
                     ) : (
                       <div className="space-y-4">
-                        <Skeleton className="h-6 w-3/4 bg-gray-200/50" />
-                        <Skeleton className="h-4 w-full bg-gray-200/50" />
-                        <Skeleton className="h-4 w-5/6 bg-gray-200/50" />
+                        <Skeleton className="h-6 w-3/4 bg-muted/50" />
+                        <Skeleton className="h-4 w-full bg-muted/50" />
+                        <Skeleton className="h-4 w-5/6 bg-muted/50" />
                       </div>
                     )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
 
-              {/* Right Side - Career Path Cards */}
+              {/* Right Side - Career Crystals */}
               <div className="lg:col-span-1">
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Career Paths</h2>
+                  <h2 className="text-2xl font-bold magical-text mb-4">Destined Career Crystals</h2>
                   {displayedCareers.length > 0 ? (
                     displayedCareers.map((career) => (
-                      <Card key={career.id} className="bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="p-3 bg-gradient-to-br from-white to-gray-50 rounded-full shadow-md flex-shrink-0">
-                              {career.icon}
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="text-lg font-bold text-blue-800 mb-2">{career.title}</h3>
-                              <p className="text-gray-600 text-sm mb-3">{career.description}</p>
-                              
-                              <div className="mb-3">
-                                <h4 className="font-semibold text-gray-700 text-sm mb-2">Key Skills:</h4>
-                                <div className="flex flex-wrap gap-1">
-                                  {career.skills.map((skill, skillIndex) => (
-                                    <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                                      {skill}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              
-                               <div className="mb-3 pt-2 border-t border-gray-200">
-                                <div className="text-xs">
-                                  <span className="text-gray-600">Duration:</span>
-                                  <div className="font-semibold text-blue-600">{career.duration}</div>
-                                </div>
-                              </div>
-                              
-                              <Button 
-                                asChild
-                                className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold text-sm py-2"
-                              >
-                                <a href={career.courseLink} target="_blank" rel="noopener noreferrer">
-                                  Enroll in {career.courseName}
-                                </a>
-                              </Button>
-                            </div>
+                      <div key={career.id} className="career-crystal">
+                        <div className="flex items-start gap-4">
+                          <div className="p-3 bg-primary/20 rounded-full flex-shrink-0">
+                            {career.icon}
                           </div>
-                        </CardContent>
-                      </Card>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-primary mb-2">{career.title}</h3>
+                            <p className="text-foreground/80 text-sm mb-3">{career.description}</p>
+                            
+                            <div className="mb-3">
+                              <h4 className="font-semibold text-foreground text-sm mb-2">Mystical Skills:</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {career.skills.map((skill, skillIndex) => (
+                                  <span key={skillIndex} className="px-2 py-1 bg-primary/20 text-primary rounded-full text-xs font-medium">
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            <div className="mb-3 pt-2 border-t border-border">
+                              <div className="text-xs">
+                                <span className="text-muted-foreground">Training Duration:</span>
+                                <div className="font-semibold text-accent">{career.duration}</div>
+                              </div>
+                            </div>
+                            
+                            <Button 
+                              asChild
+                              className="w-full mystical-button text-primary-foreground font-semibold text-sm py-2"
+                            >
+                              <a href={career.courseLink} target="_blank" rel="noopener noreferrer">
+                                Begin Your Journey in {career.courseName}
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     ))
                   ) : (
                     <div className="space-y-6">
                       {[1, 2, 3].map((_, index) => (
-                        <Skeleton key={index} className="h-48 w-full bg-gray-200/50 rounded-lg" />
+                        <Skeleton key={index} className="h-48 w-full bg-muted/50 rounded-lg" />
                       ))}
                     </div>
                   )}
@@ -879,9 +881,9 @@ const Index = () => {
           <div className="text-center">
             <Button 
               onClick={resetForm}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300"
+              className="mystical-button text-primary-foreground px-8 py-3 rounded-full font-semibold"
             >
-              Take Assessment Again
+              Consult the Oracle Again
             </Button>
           </div>
         </div>
@@ -893,142 +895,151 @@ const Index = () => {
   const progress = ((currentStep + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen relative" style={{
+      backgroundImage: `url(/lovable-uploads/9aefbf18-e715-441c-bf8b-2eb197955cd0.png)`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed'
+    }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-background/90 to-background/95"></div>
+      <div className="relative z-10 container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full mb-4">
-            <Brain className="w-5 h-5" />
-            <span className="font-semibold">AI Tech Career Guide</span>
+          <div className="inline-flex items-center gap-2 mystical-button text-primary-foreground px-6 py-3 rounded-full mb-4">
+            <Crown className="w-5 h-5" />
+            <span className="font-semibold">The Ancient Sorcerer's Guide</span>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Discover Your Perfect Tech Career
+          <h1 className="ancient-title">
+            Enter the Fantasy World of Tech
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Answer the following questions to discover the tech career path that most suits you
+          <p className="sorcerer-subtitle max-w-2xl mx-auto">
+            Welcome, brave seeker! Answer the ancient questions to discover your destined path in the mystical realm of technology.
           </p>
         </div>
 
-          <div className="max-w-2xl mx-auto">
-            {/* Test Button */}
-            <div className="mb-4 text-center">
-              <Button
-                onClick={testWebhook}
-                disabled={isSubmitting}
-                variant="outline"
-                className="bg-red-100 border-red-300 text-red-700 hover:bg-red-200 px-4 py-2 rounded-md font-medium"
-              >
-                🧪 Test Webhook
-              </Button>
-            </div>
+        <div className="max-w-2xl mx-auto">
+          {/* Test Spell Button */}
+          <div className="mb-4 text-center">
+            <Button
+              onClick={testWebhook}
+              disabled={isSubmitting}
+              variant="outline"
+              className="bg-destructive/20 border-destructive text-destructive hover:bg-destructive/30 px-4 py-2 rounded-md font-medium"
+            >
+              🔮 Test the Mystical Connection
+            </Button>
+          </div>
 
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">Progress</span>
-                <span className="text-sm font-medium text-gray-700">{currentStep + 1} of {questions.length}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
+          {/* Progress Enchantment */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-foreground">Journey Progress</span>
+              <span className="text-sm font-medium text-foreground">{currentStep + 1} of {questions.length}</span>
             </div>
+            <div className="wizard-progress h-3">
+              <div 
+                className="wizard-progress-fill"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
 
-          <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg" onKeyDown={handleKeyPress}>
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-800">
-                {currentQuestion.label}
-              </CardTitle>
-              {currentQuestion.required && (
-                <span className="text-red-500 text-sm">* Required</span>
-              )}
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {currentQuestion.type === 'text' ? (
-                <div>
-                  <Label htmlFor={currentQuestion.key} className="text-gray-700 font-medium">
-                    {currentQuestion.label}
-                  </Label>
-                  <Input
-                    id={currentQuestion.key}
-                    placeholder={currentQuestion.placeholder}
-                    value={formData[currentQuestion.key]}
-                    onChange={(e) => handleInputChange(currentQuestion.key, e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    className="mt-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              ) : (
-                <div>
-                  <Label htmlFor={currentQuestion.key} className="text-gray-700 font-medium">
-                    Select an option
-                  </Label>
-                  <Select 
-                    value={formData[currentQuestion.key]} 
-                    onValueChange={(value) => handleInputChange(currentQuestion.key, value)}
-                  >
-                    <SelectTrigger 
-                      className="mt-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+          <div className="fantasy-card" onKeyDown={handleKeyPress}>
+            <div className="p-6">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold magical-text mb-2">
+                  {currentQuestion.label}
+                </h2>
+                {currentQuestion.required && (
+                  <span className="text-destructive text-sm">* Required by the Ancient Spirits</span>
+                )}
+              </div>
+              
+              <div className="space-y-6">
+                {currentQuestion.type === 'text' ? (
+                  <div>
+                    <Label htmlFor={currentQuestion.key} className="text-foreground font-medium">
+                      {currentQuestion.label}
+                    </Label>
+                    <Input
+                      id={currentQuestion.key}
+                      placeholder={currentQuestion.placeholder}
+                      value={formData[currentQuestion.key]}
+                      onChange={(e) => handleInputChange(currentQuestion.key, e.target.value)}
                       onKeyDown={handleKeyPress}
+                      className="mt-2 spell-input"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <Label htmlFor={currentQuestion.key} className="text-foreground font-medium">
+                      Choose your response, seeker
+                    </Label>
+                    <Select 
+                      value={formData[currentQuestion.key]} 
+                      onValueChange={(value) => handleInputChange(currentQuestion.key, value)}
                     >
-                      <SelectValue placeholder="Choose an option..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
-                      {currentQuestion.options?.map((option, index) => (
-                        <SelectItem key={index} value={option} className="hover:bg-blue-50">
-                          {option}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  {/* Conditional "Other" input */}
-                  {currentQuestion.conditionalField && formData[currentQuestion.key] === 'Other' && (
-                    <div className="mt-2">
-                      <Input
-                        placeholder={
-                          currentQuestion.conditionalField === 'activitiesOther' ? 'Describe what you enjoy' :
-                          currentQuestion.conditionalField === 'projectOther' ? 'Describe the project' :
-                          currentQuestion.conditionalField === 'skillsOther' ? 'Describe your skill' :
-                          currentQuestion.conditionalField === 'techExposureOther' ? 'Describe your tech experience' :
-                          currentQuestion.conditionalField === 'motivationOther' ? 'Describe your motivation' :
-                          currentQuestion.conditionalField === 'learningStyleOther' ? 'Describe how you learn' :
-                          'Please specify'
-                        }
-                        value={formData[currentQuestion.conditionalField as keyof FormData]}
-                        onChange={(e) => handleInputChange(currentQuestion.conditionalField as keyof FormData, e.target.value)}
-                        className="border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                  )}
+                      <SelectTrigger 
+                        className="mt-2 spell-input"
+                        onKeyDown={handleKeyPress}
+                      >
+                        <SelectValue placeholder="Select your destiny..." />
+                      </SelectTrigger>
+                      <SelectContent className="bg-card border border-border shadow-lg z-50">
+                        {currentQuestion.options?.map((option, index) => (
+                          <SelectItem key={index} value={option} className="hover:bg-accent">
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    
+                    {/* Conditional mystical input */}
+                    {currentQuestion.conditionalField && formData[currentQuestion.key] === 'Other' && (
+                      <div className="mt-2">
+                        <Input
+                          placeholder={
+                            currentQuestion.conditionalField === 'activitiesOther' ? 'Describe your mystical pursuits' :
+                            currentQuestion.conditionalField === 'projectOther' ? 'Describe your dream project' :
+                            currentQuestion.conditionalField === 'skillsOther' ? 'Describe your hidden talent' :
+                            currentQuestion.conditionalField === 'techExposureOther' ? 'Describe your mystical experience' :
+                            currentQuestion.conditionalField === 'motivationOther' ? 'Describe your noble quest' :
+                            currentQuestion.conditionalField === 'learningStyleOther' ? 'Describe your learning magic' :
+                            'Please reveal your secret...'
+                          }
+                          value={formData[currentQuestion.conditionalField as keyof FormData]}
+                          onChange={(e) => handleInputChange(currentQuestion.conditionalField as keyof FormData, e.target.value)}
+                          className="spell-input"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-between pt-6">
+                  <Button
+                    onClick={handlePrevious}
+                    disabled={currentStep === 0}
+                    variant="outline"
+                    className="px-6 py-2 border-border text-muted-foreground hover:bg-accent disabled:opacity-50"
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    onClick={handleNext}
+                    disabled={isSubmitting}
+                    className="mystical-button text-primary-foreground px-6 py-2 rounded-md font-semibold flex items-center gap-2"
+                  >
+                    {isSubmitting ? 'Consulting the Oracle...' : (currentStep === questions.length - 1 ? 'Reveal My Destiny' : 'Continue the Quest')}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
                 </div>
-              )}
 
-              <div className="flex justify-between pt-6">
-                <Button
-                  onClick={handlePrevious}
-                  disabled={currentStep === 0}
-                  variant="outline"
-                  className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                >
-                  Previous
-                </Button>
-                <Button
-                  onClick={handleNext}
-                  disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 flex items-center gap-2"
-                >
-                  {isSubmitting ? 'Submitting...' : (currentStep === questions.length - 1 ? 'Discover My Tech Path' : 'Next')}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+                <div className="text-center text-sm text-muted-foreground mt-4">
+                  Press Enter to continue your mystical journey
+                </div>
               </div>
-
-              <div className="text-center text-sm text-gray-500 mt-4">
-                Press Enter to continue
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
