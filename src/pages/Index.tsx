@@ -550,7 +550,7 @@ const Index = () => {
       };
       console.log('Submitting payload:', JSON.stringify(payload, null, 2));
 
-      const webhookUrl = 'https://kindness300mjulygetit.app.n8n.cloud/webhook/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0';
+      const webhookUrl = 'https://kindness300mjulygetit.app.n8n.cloud/webhook/d82a32f0-54ad-425f-bc24-252661b72529';
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -596,7 +596,7 @@ const Index = () => {
       };
       console.log('Testing webhook with payload:', JSON.stringify(payload, null, 2));
 
-      const testWebhookUrl = 'https://kindness300mjulygetit.app.n8n.cloud/webhook-test/89f54f8b-21dd-42d0-a1a0-09a2e9ca28e0';
+      const testWebhookUrl = 'https://kindness300mjulygetit.app.n8n.cloud/webhook-test/d82a32f0-54ad-425f-bc24-252661b72529';
       const response = await fetch(testWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
